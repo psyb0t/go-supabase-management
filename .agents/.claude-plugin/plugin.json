@@ -1,0 +1,8 @@
+{
+  "name": "go-supabase-management",
+  "description": "Unofficial Go client for the Supabase Management API: typed methods for organizations, projects, branches, database and auth config, edge functions, secrets and more.",
+  "author": { "name": "psyb0t", "url": "https://github.com/psyb0t" },
+  "homepage": "https://github.com/psyb0t/go-supabase-management",
+  "license": "MIT",
+  "keywords": ["supabase", "management-api", "postgres", "go-library", "api-client"]
+}

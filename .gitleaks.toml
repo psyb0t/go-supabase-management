@@ -1,0 +1,34 @@
+title = "go-supabase-management secret scanning"
+
+[extend]
+useDefault = true
+
+# gitleaks' `dir` mode walks the working tree and does NOT honour .gitignore, so
+# every gitignored local path is named again here. Nothing gitignored is tracked
+# by git. The committed Go vendor/ tree is intentionally NOT listed: it ships to
+# consumers, so it gets scanned. Verify with `git check-ignore <path>` before
+# adding a line; an entry for a committed source path silences real leaks.
+[[allowlists]]
+description = "Gitignored local scratch, downloaded specs, caches, and scan artifacts"
+paths = [
+  '''(^|/)\.env$''',
+  '''(^|/)\.vscode(?:/|$)''',
+  '''(^|/)\.telemetry(?:/|$)''',
+  '''(^|/)\.research_files(?:/|$)''',
+  '''(^|/)\.testing(?:/|$)''',
+  '''(^|/)api/openapi(?:\.fixed)?\.json$''',
+  '''(^|/)__pycache__(?:/|$)''',
+  '''(^|/)sec\.sarif$''',
+  '''(^|/)git-update\.sh(?:\.debot)?$''',
+  '''(^|/)CLAUDE\.md$''',
+]
+
+# The spec's pgsodium config examples use a placeholder root key made of a
+# repeated hex counting pattern. oapi-codegen copies the example into a doc
+# comment, and gitleaks reads it as a generic API key. Only that exact value,
+# only in the generated models file.
+[[allowlists]]
+description = "Placeholder pgsodium root_key from the Supabase spec examples"
+condition = "AND"
+paths = ['''(^|/)types\.gen\.go$''']
+regexes = ['''0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef''']
