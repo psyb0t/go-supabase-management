@@ -40,7 +40,7 @@ Names come from the spec's operation IDs and all start with `V1`. Each has a `..
 | Edge functions | `V1ListAllFunctions`, `V1GetAFunction`, `V1DeployAFunction` |
 | Health and logs | `V1GetServicesHealth`, `V1GetProjectLogs` |
 
-Look up the rest in `client.gen.go`; the method set is exactly the spec's 115 paths.
+Look up the rest with `go doc`, as the skill's "Finding endpoints and types" section shows; every operation in the spec has a method.
 
 Write endpoints (create, update, delete, pause, restore, reset, merge, `V1RunAQuery`) act on live projects. Use them only when the user asked for that change on that project.
 

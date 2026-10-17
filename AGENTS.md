@@ -38,7 +38,7 @@ make sec       # gitleaks, govulncheck, semgrep
 
 ## Project-specific landmines
 
-- A parameter that is `anyOf` a string or an array makes oapi-codegen emit a self-referencing, doubly declared type. `fix-spec.sh` keeps the array branch. Today that is only the `services` parameter of the health endpoint; the filter catches any new one.
+- A parameter that is `anyOf` a string or an array makes oapi-codegen emit a self-referencing, doubly declared type. `fix-spec.sh` keeps the array branch. The `services` parameter of the health endpoint is one; the filter catches any new one.
 - Two property spellings that map to the same Go name (`connectionString` and `connection_string`) do not compile. `fix-spec.sh` renames the deprecated one with `x-go-name`. A new collision of this kind shows up as a "redeclared" build error after `make generate`.
 - The spec's pgsodium examples carry a placeholder root key that gitleaks flags in `types.gen.go`. `.gitleaks.toml` allowlists that exact value in that file only.
 - `make generate` always downloads the current spec, so the CI pipeline skips the drift check. Regenerate locally and commit the result.

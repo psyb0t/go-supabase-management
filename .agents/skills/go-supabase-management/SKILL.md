@@ -1,7 +1,8 @@
 ---
 name: go-supabase-management
-description: Unofficial Go client for the Supabase Management API (`github.com/psyb0t/go-supabase-management`, package `supabase`), generated with oapi-codegen from Supabase's OpenAPI document. Typed methods on `supabase.ClientWithResponses` cover all 115 paths of `https://api.supabase.com`, among them organizations, projects, branches, database and pooler config, auth config, edge functions, secrets, API keys, custom domains, network restrictions, billing add-ons, analytics and OAuth. Requests authenticate with a Bearer personal access token or OAuth access token set in a request editor. Use when Go code needs to list or manage Supabase projects, organizations, branches or project settings, or already imports go-supabase-management. Not for the per-project data API (PostgREST, Auth, Storage).
+description: Unofficial Go client for the Supabase Management API (`github.com/psyb0t/go-supabase-management`, package `supabase`), generated with oapi-codegen from Supabase's OpenAPI document. Typed methods on `supabase.ClientWithResponses` cover every path of `https://api.supabase.com`, among them organizations, projects, branches, database and pooler config, auth config, edge functions, secrets, API keys, custom domains, network restrictions, billing add-ons, analytics and OAuth. Requests authenticate with a Bearer personal access token or OAuth access token set in a request editor. Use when Go code needs to list or manage Supabase projects, organizations, branches or project settings, or already imports go-supabase-management. Not for the per-project data API (PostgREST, Auth, Storage).
 homepage: https://github.com/psyb0t/go-supabase-management
+license: MIT
 user-invocable: true
 metadata:
   openclaw:
@@ -9,8 +10,6 @@ metadata:
     requires:
       bins:
         - go
-      env:
-        - SUPABASE_ACCESS_TOKEN
 permissions:
   filesystem: "Guides edits to the Go source of the current project. The library reads and writes no files."
   shell: "The Go toolchain (`go get`, `go build`, `go test`) to add and compile the dependency."
@@ -39,6 +38,20 @@ For install, auth options, method naming and the operation groups, see [referenc
 
 - You want to read or write rows, call Auth for end users, or use Storage inside one project. That is the project's data API, served from `https://<ref>.supabase.co`, not this client.
 - The code is not Go, or a single `supabase` CLI command does the job.
+
+## Finding endpoints and types
+
+The examples below cover a few calls. Every operation in the spec has a generated method, and the spec's descriptions are on them as Go doc comments. Look names and fields up instead of guessing. After `go get github.com/psyb0t/go-supabase-management`, from inside your module:
+
+```bash
+go doc github.com/psyb0t/go-supabase-management ClientWithResponsesInterface  # every endpoint method
+go doc github.com/psyb0t/go-supabase-management V1GetServicesHealthParams     # one method, params type or model
+go doc -all github.com/psyb0t/go-supabase-management                          # the whole package
+```
+
+The same documentation is at https://pkg.go.dev/github.com/psyb0t/go-supabase-management.
+
+Method names come from the spec's operation IDs. `<OperationId>WithResponse` takes the context, then the path parameters in order, then `*<OperationId>Params` when the operation has query or header parameters, then the request body when it has one. The `JSON200` field (or `JSON201` and so on, per declared status) holds the decoded body; it is nil for any other status. An operation whose body is not JSON, such as the multipart `V1DeployAFunction`, has only the `WithBodyWithResponse` variant, which takes a content type and an `io.Reader`.
 
 ## Usage
 

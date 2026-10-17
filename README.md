@@ -61,6 +61,8 @@ The same code is in `example_test.go`, run against a local test server, so `make
 
 Method names come from the spec's operation IDs, so they all start with `V1`: `V1ListAllOrganizations`, `V1GetProject`, `V1CreateABranch` and so on. Most project endpoints take the 20 character project ref as their first argument after the context.
 
+The full API, with the spec's descriptions as doc comments, is in the [Go reference](https://pkg.go.dev/github.com/psyb0t/go-supabase-management) and in `go doc github.com/psyb0t/go-supabase-management` from inside your module.
+
 ## Auth
 
 The Management API takes a Bearer token in the `Authorization` header. It is either a personal access token, created under Access Tokens in the Supabase dashboard, or an OAuth access token issued to a Supabase OAuth app. The request editor is the same for both, as in the example above. An OAuth token only reaches the endpoints its approved scopes allow.
