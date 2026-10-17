@@ -2,6 +2,10 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.1.1, 2026-10-17
+
+- Documentation only. The README and `AGENTS.md` describe the daily regeneration workflow: what it checks, how it fixes failing checks, how it picks the next version and which paths a fix may not touch.
+
 ## v0.1.0, 2026-10-16
 
 - Added `supabase`, a REST client generated with oapi-codegen from Supabase's OpenAPI document (Supabase API (v1), spec version 1.0.0, OpenAPI 3.0.0, from api.supabase.com/api/v1-json). It covers all 115 paths of the Management API: organizations, projects, branches, database and pooler config, auth config, edge functions, secrets, custom domains, network restrictions, billing add-ons, analytics and OAuth.

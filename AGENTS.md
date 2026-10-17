@@ -42,6 +42,7 @@ make sec       # gitleaks, govulncheck, semgrep
 - Two property spellings that map to the same Go name (`connectionString` and `connection_string`) do not compile. `fix-spec.sh` renames the deprecated one with `x-go-name`. A new collision of this kind shows up as a "redeclared" build error after `make generate`.
 - The spec's pgsodium examples carry a placeholder root key that gitleaks flags in `types.gen.go`. `.gitleaks.toml` allowlists that exact value in that file only.
 - `make generate` always downloads the current spec, so the CI pipeline skips the drift check. Regenerate locally and commit the result.
+- `.github/workflows/regen.yml` regenerates the client every day and releases the result. When the checks fail, Claude edits the repository to fix them, but a fix may not touch the paths listed under `fix_protected_paths` in that workflow: the workflows, the Makefile, `AGENTS.md`, `.agents/rules/`, the lint, security and spec download scripts and their configs. A problem that needs a change there fails the run and needs a manual fix.
 
 ## Rules
 

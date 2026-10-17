@@ -79,6 +79,8 @@ make generate
 - `scripts/fix-spec.sh` writes `api/openapi.fixed.json` with two fixes. The `services` query parameter of the project health endpoint is `anyOf` a comma-separated string or an array of enum values, which makes oapi-codegen emit a type that refers to itself; the script keeps the array form. The pooler config response has both `connectionString` (deprecated) and `connection_string`, which would both become the Go field `ConnectionString`; the script names the deprecated one `DeprecatedConnectionString`.
 - oapi-codegen runs twice: `config.yaml` writes the models to `types.gen.go` and `config.client.yaml` writes the client to `client.gen.go`. Both map `number` to `float64`, because oapi-codegen would otherwise use `float32` for numbers with no format.
 
+`.github/workflows/regen.yml` does the same every day in CI. When the new spec changes the client, it runs `make lint`, `make test` and `make sec`. If a check fails, Claude edits the code and the checks run again, up to three times, and a review step reads the result. A passing change is committed with a CHANGELOG entry and tagged as the next release: a patch version for fixes and additions, a minor version for breaking changes.
+
 ## Agent integrations
 
 The [skill](.agents/skills/go-supabase-management) teaches a coding agent how to use go-supabase-management when it writes Go. It works in any agent that reads `.agents/skills/`, and installs natively in the clients below.
