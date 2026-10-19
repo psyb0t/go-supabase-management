@@ -16875,11 +16875,11 @@ type V1GetAvailableRegionsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *RegionsInfoOutput
+	JSON200 *RegionsInfoV1Output
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r V1GetAvailableRegionsResponse) GetJSON200() *RegionsInfoOutput {
+func (r V1GetAvailableRegionsResponse) GetJSON200() *RegionsInfoV1Output {
 	return r.JSON200
 }
 
@@ -26802,7 +26802,7 @@ func ParseV1GetAvailableRegionsResponse(rsp *http.Response) (*V1GetAvailableRegi
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest RegionsInfoOutput
+		var dest RegionsInfoV1Output
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

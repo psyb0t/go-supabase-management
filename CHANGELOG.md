@@ -2,6 +2,13 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.2.0, 2026-10-19
+
+- The Supabase Management API renamed the `RegionsInfo_Output` schema to `RegionsInfoV1_Output`. The generated `RegionsInfoOutput` type is renamed to `RegionsInfoV1Output`, along with its twelve nested enum types: `RegionsInfoOutputAllSmartGroupCode`, `RegionsInfoOutputAllSmartGroupType`, `RegionsInfoOutputAllSpecificCode`, `RegionsInfoOutputAllSpecificProvider`, `RegionsInfoOutputAllSpecificStatus`, `RegionsInfoOutputAllSpecificType`, `RegionsInfoOutputRecommendationsSmartGroupCode`, `RegionsInfoOutputRecommendationsSmartGroupType`, `RegionsInfoOutputRecommendationsSpecificCode`, `RegionsInfoOutputRecommendationsSpecificProvider`, `RegionsInfoOutputRecommendationsSpecificStatus` and `RegionsInfoOutputRecommendationsSpecificType` become the matching `RegionsInfoV1Output...` names.
+- `V1GetAvailableRegionsResponse.JSON200` and its `GetJSON200` method now return `*RegionsInfoV1Output` instead of `*RegionsInfoOutput`.
+- The fields and enum values are the same. Code that names the old types must switch to the new names.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.1.2, 2026-10-17
 
 - Documentation only. The agent skill explains how to look up every endpoint, parameter and model with `go doc` or on pkg.go.dev, and declares its license.

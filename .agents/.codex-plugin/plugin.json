@@ -1,6 +1,6 @@
 {
   "name": "go-supabase-management",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Unofficial Go client for the Supabase Management API: typed methods for organizations, projects, branches, database and auth config, edge functions, secrets and more.",
   "author": { "name": "psyb0t", "url": "https://github.com/psyb0t" },
   "homepage": "https://github.com/psyb0t/go-supabase-management",
