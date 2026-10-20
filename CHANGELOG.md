@@ -2,6 +2,13 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.3.0, 2026-10-20
+
+- The Supabase Management API now describes the update-function request body for two content types. The generated `V1UpdateFunctionBody` type is renamed to `V1UpdateFunctionBodyJson`, with the same fields `Body`, `Name` and `VerifyJwt`.
+- Added `V1UpdateFunctionBodyEszip`, an alias of `openapi_types.File`, for the raw Brotli-compressed ESZIP upload. Its doc comment lists the `EZBR` magic bytes and the `ezbr_sha256` query parameter.
+- `V1UpdateAFunctionJSONRequestBody` now aliases `V1UpdateFunctionBodyJson`. Code that names `V1UpdateFunctionBody` must switch to the new name.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.2.0, 2026-10-19
 
 - The Supabase Management API renamed the `RegionsInfo_Output` schema to `RegionsInfoV1_Output`. The generated `RegionsInfoOutput` type is renamed to `RegionsInfoV1Output`, along with its twelve nested enum types: `RegionsInfoOutputAllSmartGroupCode`, `RegionsInfoOutputAllSmartGroupType`, `RegionsInfoOutputAllSpecificCode`, `RegionsInfoOutputAllSpecificProvider`, `RegionsInfoOutputAllSpecificStatus`, `RegionsInfoOutputAllSpecificType`, `RegionsInfoOutputRecommendationsSmartGroupCode`, `RegionsInfoOutputRecommendationsSmartGroupType`, `RegionsInfoOutputRecommendationsSpecificCode`, `RegionsInfoOutputRecommendationsSpecificProvider`, `RegionsInfoOutputRecommendationsSpecificStatus` and `RegionsInfoOutputRecommendationsSpecificType` become the matching `RegionsInfoV1Output...` names.

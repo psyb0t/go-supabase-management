@@ -9267,8 +9267,37 @@ type V1UpdateBackupScheduleBody struct {
 	ScheduleFor string `json:"schedule_for"`
 }
 
-// V1UpdateFunctionBody Example: {"body":"Deno.serve(() =\u003e new Response('Hello again!'))","name":"Hello World","verify_jwt":true}
-type V1UpdateFunctionBody struct {
+// V1UpdateFunctionBodyEszip Raw Brotli-compressed ESZIP binary file.
+//
+// **Validation requirements** - The file must start with the four magic bytes `EZBR` (hex: `45 5A 42 52`).
+// - The `ezbr_sha256` query parameter must contain the SHA-256 hash of the uploaded ESZIP payload.
+//
+// **Example**
+// ```javascript
+// import { readFile } from 'node:fs/promises';
+// import { brotliCompress } from 'node:zlib';
+// import { promisify } from 'node:util';
+// import { createHash } from 'node:crypto';
+//
+// const compress = promisify(brotliCompress);
+// const marker = Buffer.from('EZBR', 'ascii');
+//
+// const file = await readFile('./function.eszip');
+// const compressed = await compress(file);
+//
+// const payload = Buffer.concat([marker, compressed]);
+//
+// const ezbr_sha256 = createHash('sha256')
+//
+//	.update(payload)
+//	.digest('hex');
+//
+// console.log(ezbr_sha256);
+// ```
+type V1UpdateFunctionBodyEszip = openapi_types.File
+
+// V1UpdateFunctionBodyJson Example: {"body":"Deno.serve(() =\u003e new Response('Hello again!'))","name":"Hello World","verify_jwt":true}
+type V1UpdateFunctionBodyJson struct {
 	Body      *string `json:"body,omitempty"`
 	Name      *string `json:"name,omitempty"`
 	VerifyJwt *bool   `json:"verify_jwt,omitempty"`
@@ -9865,7 +9894,7 @@ type V1BulkUpdateFunctionsJSONRequestBody = BulkUpdateFunctionBody
 type V1DeployAFunctionMultipartRequestBody = FunctionDeployBody
 
 // V1UpdateAFunctionJSONRequestBody defines body for V1UpdateAFunction for application/json ContentType.
-type V1UpdateAFunctionJSONRequestBody = V1UpdateFunctionBody
+type V1UpdateAFunctionJSONRequestBody = V1UpdateFunctionBodyJson
 
 // V1UpdateJitAccessConfigJSONRequestBody defines body for V1UpdateJitAccessConfig for application/json ContentType.
 type V1UpdateJitAccessConfigJSONRequestBody = JitAccessRequestRequest
