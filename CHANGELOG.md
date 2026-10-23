@@ -2,6 +2,12 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.3.1, 2026-10-23
+
+- Added two advisor lint names to `V1ProjectAdvisorsResponseOutputLintsName`: `V1ProjectAdvisorsResponseOutputLintsNameRealtimeAuthorizationTimeouts` (`realtime_authorization_timeouts`) and `V1ProjectAdvisorsResponseOutputLintsNameRealtimePostgresChangesSpike` (`realtime_postgres_changes_spike`). The `Valid` method accepts both.
+- Raised the Go requirement from 1.26.9 to 1.26.10 in `go.mod`, the development image and the setup notes of the agent skill. Go 1.26.10 fixes GO-2026-6809 in `crypto/x509`, which `govulncheck` flagged.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.3.0, 2026-10-20
 
 - The Supabase Management API now describes the update-function request body for two content types. The generated `V1UpdateFunctionBody` type is renamed to `V1UpdateFunctionBodyJson`, with the same fields `Body`, `Name` and `VerifyJwt`.

@@ -4819,6 +4819,8 @@ const (
 	V1ProjectAdvisorsResponseOutputLintsNamePitrNotEnabled                V1ProjectAdvisorsResponseOutputLintsName = "pitr_not_enabled"
 	V1ProjectAdvisorsResponseOutputLintsNamePolicyExistsRlsDisabled       V1ProjectAdvisorsResponseOutputLintsName = "policy_exists_rls_disabled"
 	V1ProjectAdvisorsResponseOutputLintsNameProjectNotActive              V1ProjectAdvisorsResponseOutputLintsName = "project_not_active"
+	V1ProjectAdvisorsResponseOutputLintsNameRealtimeAuthorizationTimeouts V1ProjectAdvisorsResponseOutputLintsName = "realtime_authorization_timeouts"
+	V1ProjectAdvisorsResponseOutputLintsNameRealtimePostgresChangesSpike  V1ProjectAdvisorsResponseOutputLintsName = "realtime_postgres_changes_spike"
 	V1ProjectAdvisorsResponseOutputLintsNameRlsDisabledInPublic           V1ProjectAdvisorsResponseOutputLintsName = "rls_disabled_in_public"
 	V1ProjectAdvisorsResponseOutputLintsNameRlsEnabledNoPolicy            V1ProjectAdvisorsResponseOutputLintsName = "rls_enabled_no_policy"
 	V1ProjectAdvisorsResponseOutputLintsNameRlsReferencesUserMetadata     V1ProjectAdvisorsResponseOutputLintsName = "rls_references_user_metadata"
@@ -4898,6 +4900,10 @@ func (e V1ProjectAdvisorsResponseOutputLintsName) Valid() bool {
 	case V1ProjectAdvisorsResponseOutputLintsNamePolicyExistsRlsDisabled:
 		return true
 	case V1ProjectAdvisorsResponseOutputLintsNameProjectNotActive:
+		return true
+	case V1ProjectAdvisorsResponseOutputLintsNameRealtimeAuthorizationTimeouts:
+		return true
+	case V1ProjectAdvisorsResponseOutputLintsNameRealtimePostgresChangesSpike:
 		return true
 	case V1ProjectAdvisorsResponseOutputLintsNameRlsDisabledInPublic:
 		return true
