@@ -2,6 +2,12 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.3.2, 2026-10-26
+
+- The Supabase Management API now documents a 404 response for the project API key endpoints. The generated parsers `ParseV1GetProjectApiKeyResponse`, `ParseV1UpdateProjectApiKeyResponse` and `ParseV1DeleteProjectApiKeyResponse` handle status 404 as a response with no body.
+- No exported names changed.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.3.1, 2026-10-23
 
 - Added two advisor lint names to `V1ProjectAdvisorsResponseOutputLintsName`: `V1ProjectAdvisorsResponseOutputLintsNameRealtimeAuthorizationTimeouts` (`realtime_authorization_timeouts`) and `V1ProjectAdvisorsResponseOutputLintsNameRealtimePostgresChangesSpike` (`realtime_postgres_changes_spike`). The `Valid` method accepts both.

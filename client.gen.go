@@ -27504,6 +27504,9 @@ func ParseV1DeleteProjectApiKeyResponse(rsp *http.Response) (*V1DeleteProjectApi
 	case rsp.StatusCode == 403:
 		break // No content-type
 
+	case rsp.StatusCode == 404:
+		break // No content-type
+
 	case rsp.StatusCode == 429:
 		break // No content-type
 
@@ -27539,6 +27542,9 @@ func ParseV1GetProjectApiKeyResponse(rsp *http.Response) (*V1GetProjectApiKeyRes
 	case rsp.StatusCode == 403:
 		break // No content-type
 
+	case rsp.StatusCode == 404:
+		break // No content-type
+
 	case rsp.StatusCode == 429:
 		break // No content-type
 
@@ -27572,6 +27578,9 @@ func ParseV1UpdateProjectApiKeyResponse(rsp *http.Response) (*V1UpdateProjectApi
 		break // No content-type
 
 	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 404:
 		break // No content-type
 
 	case rsp.StatusCode == 429:
