@@ -2,6 +2,11 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.3.5, 2026-10-28
+
+- Regenerated the generated code (1 file changed, 47 insertions(+), 44 deletions(-)).
+- `V1ProjectAdvisorsResponseOutputLintsNameRealtimeConcurrentUsersNearLimit`: added.
+
 ## v0.3.4, 2026-10-28
 
 - Updated Semgrep in the development image to 1.182.1 and refreshed its locked dependencies. certifi 2026.10.23 drops the emSign root CAs whose intermediate keys were compromised (GHSA-6q48-6c7w-9gw2).
