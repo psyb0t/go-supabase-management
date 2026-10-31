@@ -7507,10 +7507,16 @@ type PostgrestConfigWithJWTSecretResponseOutput struct {
 	DbPool *int `json:"db_pool"`
 
 	// DbPoolAcquisitionTimeout If `null`, the value is automatically configured to 10.
-	DbPoolAcquisitionTimeout *int    `json:"db_pool_acquisition_timeout"`
-	DbSchema                 string  `json:"db_schema"`
-	JwtSecret                *string `json:"jwt_secret,omitempty"`
-	MaxRows                  int     `json:"max_rows"`
+	DbPoolAcquisitionTimeout *int `json:"db_pool_acquisition_timeout"`
+
+	// DbPoolMaxIdletime If `null`, the value is automatically configured to 30.
+	DbPoolMaxIdletime *int `json:"db_pool_max_idletime"`
+
+	// DbPoolMaxLifetime If `null`, the value is automatically configured to 1800.
+	DbPoolMaxLifetime *int    `json:"db_pool_max_lifetime"`
+	DbSchema          string  `json:"db_schema"`
+	JwtSecret         *string `json:"jwt_secret,omitempty"`
+	MaxRows           int     `json:"max_rows"`
 }
 
 // ProjectClaimTokenResponseOutput defines model for ProjectClaimTokenResponse_Output.
@@ -9027,9 +9033,15 @@ type V1PostgrestConfigResponseOutput struct {
 	DbPool *int `json:"db_pool"`
 
 	// DbPoolAcquisitionTimeout If `null`, the value is automatically configured to 10.
-	DbPoolAcquisitionTimeout *int   `json:"db_pool_acquisition_timeout"`
-	DbSchema                 string `json:"db_schema"`
-	MaxRows                  int    `json:"max_rows"`
+	DbPoolAcquisitionTimeout *int `json:"db_pool_acquisition_timeout"`
+
+	// DbPoolMaxIdletime If `null`, the value is automatically configured to 30.
+	DbPoolMaxIdletime *int `json:"db_pool_max_idletime"`
+
+	// DbPoolMaxLifetime If `null`, the value is automatically configured to 1800.
+	DbPoolMaxLifetime *int   `json:"db_pool_max_lifetime"`
+	DbSchema          string `json:"db_schema"`
+	MaxRows           int    `json:"max_rows"`
 }
 
 // V1ProfileResponseOutput defines model for V1ProfileResponse_Output.
@@ -9327,6 +9339,8 @@ type V1UpdatePostgrestConfigBody struct {
 	DbExtraSearchPath        *string `json:"db_extra_search_path,omitempty"`
 	DbPool                   *int    `json:"db_pool,omitempty"`
 	DbPoolAcquisitionTimeout *int    `json:"db_pool_acquisition_timeout,omitempty"`
+	DbPoolMaxIdletime        *int    `json:"db_pool_max_idletime,omitempty"`
+	DbPoolMaxLifetime        *int    `json:"db_pool_max_lifetime,omitempty"`
 	DbSchema                 *string `json:"db_schema,omitempty"`
 	MaxRows                  *int    `json:"max_rows,omitempty"`
 }

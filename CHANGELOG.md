@@ -2,6 +2,13 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.3.6, 2026-10-31
+
+- Added the PostgREST pool settings `DbPoolMaxIdletime` and `DbPoolMaxLifetime` (both `*int`) to `V1UpdatePostgrestConfigBody`, `V1PostgrestConfigResponseOutput` and `PostgrestConfigWithJWTSecretResponseOutput`.
+- On the response types the fields are `db_pool_max_idletime` and `db_pool_max_lifetime`. A `null` value means the server uses 30 for idle time and 1800 for lifetime.
+- No existing exported names changed.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.3.5, 2026-10-28
 
 - Regenerated the generated code (1 file changed, 47 insertions(+), 44 deletions(-)).
