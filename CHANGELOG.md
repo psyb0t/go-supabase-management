@@ -2,6 +2,14 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.3.7, 2026-11-04
+
+- Added the project status value `PROMOTING` to five enums: `BranchDetailResponseOutputStatusPROMOTING`, `BranchResponseOutputPreviewProjectStatusPROMOTING`, `OrganizationProjectsResponseOutputProjectsStatusPROMOTING`, `V1ProjectResponseOutputStatusPROMOTING` and `V1ProjectWithDatabaseResponseOutputStatusPROMOTING`. Their `Valid` methods accept it.
+- Added a fifth warning variant to the project upgrade eligibility response: `ProjectUpgradeEligibilityResponseOutputWarnings4`, with a `Type` field of the new type `ProjectUpgradeEligibilityResponseOutputWarnings4Type` (value `ProjectUpgradeEligibilityResponseOutputWarnings4TypeCollationReindexRequired`, `collation_reindex_required`).
+- Added the union methods `AsProjectUpgradeEligibilityResponseOutputWarnings4`, `FromProjectUpgradeEligibilityResponseOutputWarnings4` and `MergeProjectUpgradeEligibilityResponseOutputWarnings4` on `ProjectUpgradeEligibilityResponseOutput_Warnings_Item`.
+- No existing exported names changed.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.3.6, 2026-10-31
 
 - Added the PostgREST pool settings `DbPoolMaxIdletime` and `DbPoolMaxLifetime` (both `*int`) to `V1UpdatePostgrestConfigBody`, `V1PostgrestConfigResponseOutput` and `PostgrestConfigWithJWTSecretResponseOutput`.

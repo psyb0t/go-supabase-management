@@ -378,6 +378,7 @@ const (
 	BranchDetailResponseOutputStatusINITFAILED      BranchDetailResponseOutputStatus = "INIT_FAILED"
 	BranchDetailResponseOutputStatusPAUSEFAILED     BranchDetailResponseOutputStatus = "PAUSE_FAILED"
 	BranchDetailResponseOutputStatusPAUSING         BranchDetailResponseOutputStatus = "PAUSING"
+	BranchDetailResponseOutputStatusPROMOTING       BranchDetailResponseOutputStatus = "PROMOTING"
 	BranchDetailResponseOutputStatusREMOVED         BranchDetailResponseOutputStatus = "REMOVED"
 	BranchDetailResponseOutputStatusRESIZING        BranchDetailResponseOutputStatus = "RESIZING"
 	BranchDetailResponseOutputStatusRESTARTING      BranchDetailResponseOutputStatus = "RESTARTING"
@@ -405,6 +406,8 @@ func (e BranchDetailResponseOutputStatus) Valid() bool {
 	case BranchDetailResponseOutputStatusPAUSEFAILED:
 		return true
 	case BranchDetailResponseOutputStatusPAUSING:
+		return true
+	case BranchDetailResponseOutputStatusPROMOTING:
 		return true
 	case BranchDetailResponseOutputStatusREMOVED:
 		return true
@@ -435,6 +438,7 @@ const (
 	BranchResponseOutputPreviewProjectStatusINITFAILED      BranchResponseOutputPreviewProjectStatus = "INIT_FAILED"
 	BranchResponseOutputPreviewProjectStatusPAUSEFAILED     BranchResponseOutputPreviewProjectStatus = "PAUSE_FAILED"
 	BranchResponseOutputPreviewProjectStatusPAUSING         BranchResponseOutputPreviewProjectStatus = "PAUSING"
+	BranchResponseOutputPreviewProjectStatusPROMOTING       BranchResponseOutputPreviewProjectStatus = "PROMOTING"
 	BranchResponseOutputPreviewProjectStatusREMOVED         BranchResponseOutputPreviewProjectStatus = "REMOVED"
 	BranchResponseOutputPreviewProjectStatusRESIZING        BranchResponseOutputPreviewProjectStatus = "RESIZING"
 	BranchResponseOutputPreviewProjectStatusRESTARTING      BranchResponseOutputPreviewProjectStatus = "RESTARTING"
@@ -462,6 +466,8 @@ func (e BranchResponseOutputPreviewProjectStatus) Valid() bool {
 	case BranchResponseOutputPreviewProjectStatusPAUSEFAILED:
 		return true
 	case BranchResponseOutputPreviewProjectStatusPAUSING:
+		return true
+	case BranchResponseOutputPreviewProjectStatusPROMOTING:
 		return true
 	case BranchResponseOutputPreviewProjectStatusREMOVED:
 		return true
@@ -2487,6 +2493,7 @@ const (
 	OrganizationProjectsResponseOutputProjectsStatusINITFAILED      OrganizationProjectsResponseOutputProjectsStatus = "INIT_FAILED"
 	OrganizationProjectsResponseOutputProjectsStatusPAUSEFAILED     OrganizationProjectsResponseOutputProjectsStatus = "PAUSE_FAILED"
 	OrganizationProjectsResponseOutputProjectsStatusPAUSING         OrganizationProjectsResponseOutputProjectsStatus = "PAUSING"
+	OrganizationProjectsResponseOutputProjectsStatusPROMOTING       OrganizationProjectsResponseOutputProjectsStatus = "PROMOTING"
 	OrganizationProjectsResponseOutputProjectsStatusREMOVED         OrganizationProjectsResponseOutputProjectsStatus = "REMOVED"
 	OrganizationProjectsResponseOutputProjectsStatusRESIZING        OrganizationProjectsResponseOutputProjectsStatus = "RESIZING"
 	OrganizationProjectsResponseOutputProjectsStatusRESTARTING      OrganizationProjectsResponseOutputProjectsStatus = "RESTARTING"
@@ -2514,6 +2521,8 @@ func (e OrganizationProjectsResponseOutputProjectsStatus) Valid() bool {
 	case OrganizationProjectsResponseOutputProjectsStatusPAUSEFAILED:
 		return true
 	case OrganizationProjectsResponseOutputProjectsStatusPAUSING:
+		return true
+	case OrganizationProjectsResponseOutputProjectsStatusPROMOTING:
 		return true
 	case OrganizationProjectsResponseOutputProjectsStatusREMOVED:
 		return true
@@ -2891,6 +2900,21 @@ const (
 func (e ProjectUpgradeEligibilityResponseOutputWarnings3Type) Valid() bool {
 	switch e {
 	case ProjectUpgradeEligibilityResponseOutputWarnings3TypeBtreeGistNanReindex:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ProjectUpgradeEligibilityResponseOutputWarnings4Type.
+const (
+	ProjectUpgradeEligibilityResponseOutputWarnings4TypeCollationReindexRequired ProjectUpgradeEligibilityResponseOutputWarnings4Type = "collation_reindex_required"
+)
+
+// Valid indicates whether the value is a known member of the ProjectUpgradeEligibilityResponseOutputWarnings4Type enum.
+func (e ProjectUpgradeEligibilityResponseOutputWarnings4Type) Valid() bool {
+	switch e {
+	case ProjectUpgradeEligibilityResponseOutputWarnings4TypeCollationReindexRequired:
 		return true
 	default:
 		return false
@@ -4941,6 +4965,7 @@ const (
 	V1ProjectResponseOutputStatusINITFAILED      V1ProjectResponseOutputStatus = "INIT_FAILED"
 	V1ProjectResponseOutputStatusPAUSEFAILED     V1ProjectResponseOutputStatus = "PAUSE_FAILED"
 	V1ProjectResponseOutputStatusPAUSING         V1ProjectResponseOutputStatus = "PAUSING"
+	V1ProjectResponseOutputStatusPROMOTING       V1ProjectResponseOutputStatus = "PROMOTING"
 	V1ProjectResponseOutputStatusREMOVED         V1ProjectResponseOutputStatus = "REMOVED"
 	V1ProjectResponseOutputStatusRESIZING        V1ProjectResponseOutputStatus = "RESIZING"
 	V1ProjectResponseOutputStatusRESTARTING      V1ProjectResponseOutputStatus = "RESTARTING"
@@ -4968,6 +4993,8 @@ func (e V1ProjectResponseOutputStatus) Valid() bool {
 	case V1ProjectResponseOutputStatusPAUSEFAILED:
 		return true
 	case V1ProjectResponseOutputStatusPAUSING:
+		return true
+	case V1ProjectResponseOutputStatusPROMOTING:
 		return true
 	case V1ProjectResponseOutputStatusREMOVED:
 		return true
@@ -4998,6 +5025,7 @@ const (
 	V1ProjectWithDatabaseResponseOutputStatusINITFAILED      V1ProjectWithDatabaseResponseOutputStatus = "INIT_FAILED"
 	V1ProjectWithDatabaseResponseOutputStatusPAUSEFAILED     V1ProjectWithDatabaseResponseOutputStatus = "PAUSE_FAILED"
 	V1ProjectWithDatabaseResponseOutputStatusPAUSING         V1ProjectWithDatabaseResponseOutputStatus = "PAUSING"
+	V1ProjectWithDatabaseResponseOutputStatusPROMOTING       V1ProjectWithDatabaseResponseOutputStatus = "PROMOTING"
 	V1ProjectWithDatabaseResponseOutputStatusREMOVED         V1ProjectWithDatabaseResponseOutputStatus = "REMOVED"
 	V1ProjectWithDatabaseResponseOutputStatusRESIZING        V1ProjectWithDatabaseResponseOutputStatus = "RESIZING"
 	V1ProjectWithDatabaseResponseOutputStatusRESTARTING      V1ProjectWithDatabaseResponseOutputStatus = "RESTARTING"
@@ -5025,6 +5053,8 @@ func (e V1ProjectWithDatabaseResponseOutputStatus) Valid() bool {
 	case V1ProjectWithDatabaseResponseOutputStatusPAUSEFAILED:
 		return true
 	case V1ProjectWithDatabaseResponseOutputStatusPAUSING:
+		return true
+	case V1ProjectWithDatabaseResponseOutputStatusPROMOTING:
 		return true
 	case V1ProjectWithDatabaseResponseOutputStatusREMOVED:
 		return true
@@ -7709,6 +7739,14 @@ type ProjectUpgradeEligibilityResponseOutputWarnings3 struct {
 
 // ProjectUpgradeEligibilityResponseOutputWarnings3Type defines model for ProjectUpgradeEligibilityResponseOutput.Warnings.3.Type.
 type ProjectUpgradeEligibilityResponseOutputWarnings3Type string
+
+// ProjectUpgradeEligibilityResponseOutputWarnings4 defines model for ProjectUpgradeEligibilityResponseOutput.Warnings.4.
+type ProjectUpgradeEligibilityResponseOutputWarnings4 struct {
+	Type ProjectUpgradeEligibilityResponseOutputWarnings4Type `json:"type"`
+}
+
+// ProjectUpgradeEligibilityResponseOutputWarnings4Type defines model for ProjectUpgradeEligibilityResponseOutput.Warnings.4.Type.
+type ProjectUpgradeEligibilityResponseOutputWarnings4Type string
 
 // ProjectUpgradeEligibilityResponseOutput_Warnings_Item defines model for ProjectUpgradeEligibilityResponse_Output.warnings.Item.
 type ProjectUpgradeEligibilityResponseOutput_Warnings_Item struct {
@@ -12107,6 +12145,32 @@ func (t *ProjectUpgradeEligibilityResponseOutput_Warnings_Item) FromProjectUpgra
 
 // MergeProjectUpgradeEligibilityResponseOutputWarnings3 performs a merge with any union data inside the ProjectUpgradeEligibilityResponseOutput_Warnings_Item, using the provided ProjectUpgradeEligibilityResponseOutputWarnings3
 func (t *ProjectUpgradeEligibilityResponseOutput_Warnings_Item) MergeProjectUpgradeEligibilityResponseOutputWarnings3(v ProjectUpgradeEligibilityResponseOutputWarnings3) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsProjectUpgradeEligibilityResponseOutputWarnings4 returns the union data inside the ProjectUpgradeEligibilityResponseOutput_Warnings_Item as a ProjectUpgradeEligibilityResponseOutputWarnings4
+func (t ProjectUpgradeEligibilityResponseOutput_Warnings_Item) AsProjectUpgradeEligibilityResponseOutputWarnings4() (ProjectUpgradeEligibilityResponseOutputWarnings4, error) {
+	var body ProjectUpgradeEligibilityResponseOutputWarnings4
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromProjectUpgradeEligibilityResponseOutputWarnings4 overwrites any union data inside the ProjectUpgradeEligibilityResponseOutput_Warnings_Item as the provided ProjectUpgradeEligibilityResponseOutputWarnings4
+func (t *ProjectUpgradeEligibilityResponseOutput_Warnings_Item) FromProjectUpgradeEligibilityResponseOutputWarnings4(v ProjectUpgradeEligibilityResponseOutputWarnings4) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeProjectUpgradeEligibilityResponseOutputWarnings4 performs a merge with any union data inside the ProjectUpgradeEligibilityResponseOutput_Warnings_Item, using the provided ProjectUpgradeEligibilityResponseOutputWarnings4
+func (t *ProjectUpgradeEligibilityResponseOutput_Warnings_Item) MergeProjectUpgradeEligibilityResponseOutputWarnings4(v ProjectUpgradeEligibilityResponseOutputWarnings4) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
