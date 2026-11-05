@@ -2,6 +2,16 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.4.0, 2026-11-05
+
+- Added the network restrictions review endpoint: `ClientInterface.V1ReviewNetworkRestrictions` and `V1ReviewNetworkRestrictionsWithBody`, with matching methods on `Client`, `ClientWithResponses` (`V1ReviewNetworkRestrictionsWithResponse`, `V1ReviewNetworkRestrictionsWithBodyWithResponse`), and the helpers `NewV1ReviewNetworkRestrictionsRequest`, `NewV1ReviewNetworkRestrictionsRequestWithBody`, `ParseV1ReviewNetworkRestrictionsResponse`.
+- Added the request type `NetworkRestrictionsReviewRequest` (alias `V1ReviewNetworkRestrictionsJSONRequestBody`) and the enum `NetworkRestrictionsReviewRequestAction` with `NetworkRestrictionsReviewRequestActionApply` and `NetworkRestrictionsReviewRequestActionReject`.
+- Added `PendingConfig` and `PendingRequestedAt` to `NetworkRestrictionsResponseOutput`.
+- Added `ColumnName`, `SchemaName`, `TableName` and `TypeName` to `ProjectUpgradeEligibilityResponseOutputValidationErrors8`, and the constant `ProjectUpgradeEligibilityResponseOutputValidationErrors8TypeTableUsingRegType`.
+- Added the union variant `ProjectUpgradeEligibilityResponseOutputValidationErrors10` with `AsProjectUpgradeEligibilityResponseOutputValidationErrors10`, `FromProjectUpgradeEligibilityResponseOutputValidationErrors10` and `MergeProjectUpgradeEligibilityResponseOutputValidationErrors10`.
+- Breaking: removed `ProjectUpgradeEligibilityResponseOutputValidationErrors8TypeX86Architecture` and `ProjectUpgradeEligibilityResponseOutputValidationErrors9TypeProjectHibernating`. The values moved to `ProjectUpgradeEligibilityResponseOutputValidationErrors9TypeX86Architecture` and `ProjectUpgradeEligibilityResponseOutputValidationErrors10TypeProjectHibernating`.
+- Added `ClientInterface.V1ReviewNetworkRestrictions` methods, so custom implementations of `ClientInterface` and `ClientWithResponsesInterface` must add them.
+
 ## v0.3.7, 2026-11-04
 
 - Added the project status value `PROMOTING` to five enums: `BranchDetailResponseOutputStatusPROMOTING`, `BranchResponseOutputPreviewProjectStatusPROMOTING`, `OrganizationProjectsResponseOutputProjectsStatusPROMOTING`, `V1ProjectResponseOutputStatusPROMOTING` and `V1ProjectWithDatabaseResponseOutputStatusPROMOTING`. Their `Valid` methods accept it.

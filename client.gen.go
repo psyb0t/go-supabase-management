@@ -1539,6 +1539,28 @@ type ClientInterface interface {
 	// Corresponds with POST /v1/projects/{ref}/network-restrictions/apply (the `V1UpdateNetworkRestrictions` operationId).
 	V1UpdateNetworkRestrictions(ctx context.Context, ref string, body V1UpdateNetworkRestrictionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// V1ReviewNetworkRestrictionsWithBody Applies or rejects the change in review in a project's network restrictions
+	//
+	// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+	//
+	// This endpoint is currently in its **Alpha** stage.
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+	V1ReviewNetworkRestrictionsWithBody(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// V1ReviewNetworkRestrictions Applies or rejects the change in review in a project's network restrictions
+	//
+	// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+	//
+	// This endpoint is currently in its **Alpha** stage.
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+	V1ReviewNetworkRestrictions(ctx context.Context, ref string, body V1ReviewNetworkRestrictionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// V1PauseAProject Pauses the given project
 	//
 	// Corresponds with POST /v1/projects/{ref}/pause (the `V1PauseAProject` operationId).
@@ -5202,6 +5224,48 @@ func (c *Client) V1UpdateNetworkRestrictionsWithBody(ctx context.Context, ref st
 // Corresponds with POST /v1/projects/{ref}/network-restrictions/apply (the `V1UpdateNetworkRestrictions` operationId).
 func (c *Client) V1UpdateNetworkRestrictions(ctx context.Context, ref string, body V1UpdateNetworkRestrictionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewV1UpdateNetworkRestrictionsRequest(c.Server, ref, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// V1ReviewNetworkRestrictionsWithBody Applies or rejects the change in review in a project's network restrictions
+//
+// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+//
+// This endpoint is currently in its **Alpha** stage.
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+func (c *Client) V1ReviewNetworkRestrictionsWithBody(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewV1ReviewNetworkRestrictionsRequestWithBody(c.Server, ref, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// V1ReviewNetworkRestrictions Applies or rejects the change in review in a project's network restrictions
+//
+// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+//
+// This endpoint is currently in its **Alpha** stage.
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+func (c *Client) V1ReviewNetworkRestrictions(ctx context.Context, ref string, body V1ReviewNetworkRestrictionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewV1ReviewNetworkRestrictionsRequest(c.Server, ref, body)
 	if err != nil {
 		return nil, err
 	}
@@ -12685,6 +12749,53 @@ func NewV1UpdateNetworkRestrictionsRequestWithBody(server string, ref string, co
 	return req, nil
 }
 
+// NewV1ReviewNetworkRestrictionsRequest calls the generic V1ReviewNetworkRestrictions builder with application/json body
+func NewV1ReviewNetworkRestrictionsRequest(server string, ref string, body V1ReviewNetworkRestrictionsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewV1ReviewNetworkRestrictionsRequestWithBody(server, ref, "application/json", bodyReader)
+}
+
+// NewV1ReviewNetworkRestrictionsRequestWithBody constructs an http.Request for the V1ReviewNetworkRestrictions method, with any body, and a specified content type
+func NewV1ReviewNetworkRestrictionsRequestWithBody(server string, ref string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "ref", ref, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects/%s/network-restrictions/review", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewV1PauseAProjectRequest constructs an http.Request for the V1PauseAProject method
 func NewV1PauseAProjectRequest(server string, ref string) (*http.Request, error) {
 	var err error
@@ -15596,6 +15707,28 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with POST /v1/projects/{ref}/network-restrictions/apply (the `V1UpdateNetworkRestrictions` operationId).
 	V1UpdateNetworkRestrictionsWithResponse(ctx context.Context, ref string, body V1UpdateNetworkRestrictionsJSONRequestBody, reqEditors ...RequestEditorFn) (*V1UpdateNetworkRestrictionsResponse, error)
+
+	// V1ReviewNetworkRestrictionsWithBodyWithResponse Applies or rejects the change in review in a project's network restrictions
+	//
+	// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+	//
+	// This endpoint is currently in its **Alpha** stage.
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+	V1ReviewNetworkRestrictionsWithBodyWithResponse(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*V1ReviewNetworkRestrictionsResponse, error)
+
+	// V1ReviewNetworkRestrictionsWithResponse Applies or rejects the change in review in a project's network restrictions
+	//
+	// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+	//
+	// This endpoint is currently in its **Alpha** stage.
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+	V1ReviewNetworkRestrictionsWithResponse(ctx context.Context, ref string, body V1ReviewNetworkRestrictionsJSONRequestBody, reqEditors ...RequestEditorFn) (*V1ReviewNetworkRestrictionsResponse, error)
 
 	// V1PauseAProjectWithResponse Pauses the given project
 	//
@@ -21541,6 +21674,47 @@ func (r V1UpdateNetworkRestrictionsResponse) ContentType() string {
 	return ""
 }
 
+type V1ReviewNetworkRestrictionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *NetworkRestrictionsResponseOutput
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r V1ReviewNetworkRestrictionsResponse) GetJSON200() *NetworkRestrictionsResponseOutput {
+	return r.JSON200
+}
+
+// GetBody returns the raw response body bytes
+func (r V1ReviewNetworkRestrictionsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r V1ReviewNetworkRestrictionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r V1ReviewNetworkRestrictionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r V1ReviewNetworkRestrictionsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type V1PauseAProjectResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -25457,6 +25631,40 @@ func (c *ClientWithResponses) V1UpdateNetworkRestrictionsWithResponse(ctx contex
 	return ParseV1UpdateNetworkRestrictionsResponse(rsp)
 }
 
+// V1ReviewNetworkRestrictionsWithBodyWithResponse Applies or rejects the change in review in a project's network restrictions
+//
+// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+//
+// This endpoint is currently in its **Alpha** stage.
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+func (c *ClientWithResponses) V1ReviewNetworkRestrictionsWithBodyWithResponse(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*V1ReviewNetworkRestrictionsResponse, error) {
+	rsp, err := c.V1ReviewNetworkRestrictionsWithBody(ctx, ref, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseV1ReviewNetworkRestrictionsResponse(rsp)
+}
+
+// V1ReviewNetworkRestrictionsWithResponse Applies or rejects the change in review in a project's network restrictions
+//
+// This is an **experimental** endpoint. It is subject to change or removal in future versions. Use it with caution, as it may not remain supported or stable.
+//
+// This endpoint is currently in its **Alpha** stage.
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/projects/{ref}/network-restrictions/review (the `V1ReviewNetworkRestrictions` operationId).
+func (c *ClientWithResponses) V1ReviewNetworkRestrictionsWithResponse(ctx context.Context, ref string, body V1ReviewNetworkRestrictionsJSONRequestBody, reqEditors ...RequestEditorFn) (*V1ReviewNetworkRestrictionsResponse, error) {
+	rsp, err := c.V1ReviewNetworkRestrictions(ctx, ref, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseV1ReviewNetworkRestrictionsResponse(rsp)
+}
+
 // V1PauseAProjectWithResponse Pauses the given project
 //
 // Returns a wrapper object for the known response body format(s).
@@ -26484,6 +26692,9 @@ func ParseV1CreateAnOrganizationResponse(rsp *http.Response) (*V1CreateAnOrganiz
 		break // No content-type
 
 	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 404:
 		break // No content-type
 
 	case rsp.StatusCode == 429:
@@ -30614,6 +30825,44 @@ func ParseV1UpdateNetworkRestrictionsResponse(rsp *http.Response) (*V1UpdateNetw
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case rsp.StatusCode == 401:
+		break // No content-type
+
+	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 429:
+		break // No content-type
+
+	case rsp.StatusCode == 500:
+		break // No content-type
+
+	}
+
+	return response, nil
+}
+
+// ParseV1ReviewNetworkRestrictionsResponse parses an HTTP response from a V1ReviewNetworkRestrictionsWithResponse call
+func ParseV1ReviewNetworkRestrictionsResponse(rsp *http.Response) (*V1ReviewNetworkRestrictionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &V1ReviewNetworkRestrictionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest NetworkRestrictionsResponseOutput
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case rsp.StatusCode == 401:
 		break // No content-type

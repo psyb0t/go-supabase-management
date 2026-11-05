@@ -2162,6 +2162,24 @@ func (e NetworkRestrictionsResponseOutputStatus) Valid() bool {
 	}
 }
 
+// Defines values for NetworkRestrictionsReviewRequestAction.
+const (
+	NetworkRestrictionsReviewRequestActionApply  NetworkRestrictionsReviewRequestAction = "apply"
+	NetworkRestrictionsReviewRequestActionReject NetworkRestrictionsReviewRequestAction = "reject"
+)
+
+// Valid indicates whether the value is a known member of the NetworkRestrictionsReviewRequestAction enum.
+func (e NetworkRestrictionsReviewRequestAction) Valid() bool {
+	switch e {
+	case NetworkRestrictionsReviewRequestActionApply:
+		return true
+	case NetworkRestrictionsReviewRequestActionReject:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for NetworkRestrictionsV2ResponseOutputConfigDbAllowedCidrsType.
 const (
 	NetworkRestrictionsV2ResponseOutputConfigDbAllowedCidrsTypeV4 NetworkRestrictionsV2ResponseOutputConfigDbAllowedCidrsType = "v4"
@@ -2818,13 +2836,13 @@ func (e ProjectUpgradeEligibilityResponseOutputValidationErrors7Type) Valid() bo
 
 // Defines values for ProjectUpgradeEligibilityResponseOutputValidationErrors8Type.
 const (
-	ProjectUpgradeEligibilityResponseOutputValidationErrors8TypeX86Architecture ProjectUpgradeEligibilityResponseOutputValidationErrors8Type = "x86_architecture"
+	ProjectUpgradeEligibilityResponseOutputValidationErrors8TypeTableUsingRegType ProjectUpgradeEligibilityResponseOutputValidationErrors8Type = "table_using_reg_type"
 )
 
 // Valid indicates whether the value is a known member of the ProjectUpgradeEligibilityResponseOutputValidationErrors8Type enum.
 func (e ProjectUpgradeEligibilityResponseOutputValidationErrors8Type) Valid() bool {
 	switch e {
-	case ProjectUpgradeEligibilityResponseOutputValidationErrors8TypeX86Architecture:
+	case ProjectUpgradeEligibilityResponseOutputValidationErrors8TypeTableUsingRegType:
 		return true
 	default:
 		return false
@@ -2833,13 +2851,28 @@ func (e ProjectUpgradeEligibilityResponseOutputValidationErrors8Type) Valid() bo
 
 // Defines values for ProjectUpgradeEligibilityResponseOutputValidationErrors9Type.
 const (
-	ProjectUpgradeEligibilityResponseOutputValidationErrors9TypeProjectHibernating ProjectUpgradeEligibilityResponseOutputValidationErrors9Type = "project_hibernating"
+	ProjectUpgradeEligibilityResponseOutputValidationErrors9TypeX86Architecture ProjectUpgradeEligibilityResponseOutputValidationErrors9Type = "x86_architecture"
 )
 
 // Valid indicates whether the value is a known member of the ProjectUpgradeEligibilityResponseOutputValidationErrors9Type enum.
 func (e ProjectUpgradeEligibilityResponseOutputValidationErrors9Type) Valid() bool {
 	switch e {
-	case ProjectUpgradeEligibilityResponseOutputValidationErrors9TypeProjectHibernating:
+	case ProjectUpgradeEligibilityResponseOutputValidationErrors9TypeX86Architecture:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for ProjectUpgradeEligibilityResponseOutputValidationErrors10Type.
+const (
+	ProjectUpgradeEligibilityResponseOutputValidationErrors10TypeProjectHibernating ProjectUpgradeEligibilityResponseOutputValidationErrors10Type = "project_hibernating"
+)
+
+// Valid indicates whether the value is a known member of the ProjectUpgradeEligibilityResponseOutputValidationErrors10Type enum.
+func (e ProjectUpgradeEligibilityResponseOutputValidationErrors10Type) Valid() bool {
+	switch e {
+	case ProjectUpgradeEligibilityResponseOutputValidationErrors10TypeProjectHibernating:
 		return true
 	default:
 		return false
@@ -7256,8 +7289,19 @@ type NetworkRestrictionsResponseOutput struct {
 		DbAllowedCidrs   *[]string `json:"dbAllowedCidrs,omitempty"`
 		DbAllowedCidrsV6 *[]string `json:"dbAllowedCidrsV6,omitempty"`
 	} `json:"old_config,omitempty"`
-	Status    NetworkRestrictionsResponseOutputStatus `json:"status"`
-	UpdatedAt *time.Time                              `json:"updated_at,omitempty"`
+
+	// PendingConfig Present when a change that was never applied is waiting for review. `config` is the list the project enforces. Apply or reject the change with `POST /v1/projects/{ref}/network-restrictions/review`; submitting a new config also replaces it.
+	//
+	// Example: {"dbAllowedCidrs":["203.0.113.0/24"],"dbAllowedCidrsV6":["2001:db8::/32"]}
+	PendingConfig *struct {
+		DbAllowedCidrs   *[]string `json:"dbAllowedCidrs,omitempty"`
+		DbAllowedCidrsV6 *[]string `json:"dbAllowedCidrsV6,omitempty"`
+	} `json:"pending_config,omitempty"`
+
+	// PendingRequestedAt When the change in `pending_config` was requested. Send it as `requested_at` to the review endpoint.
+	PendingRequestedAt *time.Time                              `json:"pending_requested_at,omitempty"`
+	Status             NetworkRestrictionsResponseOutputStatus `json:"status"`
+	UpdatedAt          *time.Time                              `json:"updated_at,omitempty"`
 }
 
 // NetworkRestrictionsResponseOutputEntitlement defines model for NetworkRestrictionsResponseOutput.Entitlement.
@@ -7265,6 +7309,18 @@ type NetworkRestrictionsResponseOutputEntitlement string
 
 // NetworkRestrictionsResponseOutputStatus defines model for NetworkRestrictionsResponseOutput.Status.
 type NetworkRestrictionsResponseOutputStatus string
+
+// NetworkRestrictionsReviewRequest Example: {"action":"apply","requested_at":"2026-10-21T20:31:51.116+00:00"}
+type NetworkRestrictionsReviewRequest struct {
+	// Action `apply` replaces the enforced list with the pending one and applies it. `reject` discards the pending one and keeps the enforced list.
+	Action NetworkRestrictionsReviewRequestAction `json:"action"`
+
+	// RequestedAt The `pending_requested_at` of the change being reviewed. Only that change is resolved: if another one has replaced it, the request gets a 409.
+	RequestedAt time.Time `json:"requested_at"`
+}
+
+// NetworkRestrictionsReviewRequestAction `apply` replaces the enforced list with the pending one and applies it. `reject` discards the pending one and keeps the enforced list.
+type NetworkRestrictionsReviewRequestAction string
 
 // NetworkRestrictionsV2ResponseOutput defines model for NetworkRestrictionsV2Response_Output.
 type NetworkRestrictionsV2ResponseOutput struct {
@@ -7689,7 +7745,11 @@ type ProjectUpgradeEligibilityResponseOutputValidationErrors7Type string
 
 // ProjectUpgradeEligibilityResponseOutputValidationErrors8 defines model for ProjectUpgradeEligibilityResponseOutput.ValidationErrors.8.
 type ProjectUpgradeEligibilityResponseOutputValidationErrors8 struct {
-	Type ProjectUpgradeEligibilityResponseOutputValidationErrors8Type `json:"type"`
+	ColumnName string                                                       `json:"column_name"`
+	SchemaName string                                                       `json:"schema_name"`
+	TableName  string                                                       `json:"table_name"`
+	Type       ProjectUpgradeEligibilityResponseOutputValidationErrors8Type `json:"type"`
+	TypeName   string                                                       `json:"type_name"`
 }
 
 // ProjectUpgradeEligibilityResponseOutputValidationErrors8Type defines model for ProjectUpgradeEligibilityResponseOutput.ValidationErrors.8.Type.
@@ -7702,6 +7762,14 @@ type ProjectUpgradeEligibilityResponseOutputValidationErrors9 struct {
 
 // ProjectUpgradeEligibilityResponseOutputValidationErrors9Type defines model for ProjectUpgradeEligibilityResponseOutput.ValidationErrors.9.Type.
 type ProjectUpgradeEligibilityResponseOutputValidationErrors9Type string
+
+// ProjectUpgradeEligibilityResponseOutputValidationErrors10 defines model for ProjectUpgradeEligibilityResponseOutput.ValidationErrors.10.
+type ProjectUpgradeEligibilityResponseOutputValidationErrors10 struct {
+	Type ProjectUpgradeEligibilityResponseOutputValidationErrors10Type `json:"type"`
+}
+
+// ProjectUpgradeEligibilityResponseOutputValidationErrors10Type defines model for ProjectUpgradeEligibilityResponseOutput.ValidationErrors.10.Type.
+type ProjectUpgradeEligibilityResponseOutputValidationErrors10Type string
 
 // ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item defines model for ProjectUpgradeEligibilityResponse_Output.validation_errors.Item.
 type ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item struct {
@@ -9969,6 +10037,9 @@ type V1PatchNetworkRestrictionsJSONRequestBody = NetworkRestrictionsPatchRequest
 // V1UpdateNetworkRestrictionsJSONRequestBody defines body for V1UpdateNetworkRestrictions for application/json ContentType.
 type V1UpdateNetworkRestrictionsJSONRequestBody = NetworkRestrictionsRequest
 
+// V1ReviewNetworkRestrictionsJSONRequestBody defines body for V1ReviewNetworkRestrictions for application/json ContentType.
+type V1ReviewNetworkRestrictionsJSONRequestBody = NetworkRestrictionsReviewRequest
+
 // V1UpdatePgsodiumConfigJSONRequestBody defines body for V1UpdatePgsodiumConfig for application/json ContentType.
 type V1UpdatePgsodiumConfigJSONRequestBody = UpdatePgsodiumConfigBody
 
@@ -12031,6 +12102,32 @@ func (t *ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item) FromProj
 
 // MergeProjectUpgradeEligibilityResponseOutputValidationErrors9 performs a merge with any union data inside the ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item, using the provided ProjectUpgradeEligibilityResponseOutputValidationErrors9
 func (t *ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item) MergeProjectUpgradeEligibilityResponseOutputValidationErrors9(v ProjectUpgradeEligibilityResponseOutputValidationErrors9) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsProjectUpgradeEligibilityResponseOutputValidationErrors10 returns the union data inside the ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item as a ProjectUpgradeEligibilityResponseOutputValidationErrors10
+func (t ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item) AsProjectUpgradeEligibilityResponseOutputValidationErrors10() (ProjectUpgradeEligibilityResponseOutputValidationErrors10, error) {
+	var body ProjectUpgradeEligibilityResponseOutputValidationErrors10
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromProjectUpgradeEligibilityResponseOutputValidationErrors10 overwrites any union data inside the ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item as the provided ProjectUpgradeEligibilityResponseOutputValidationErrors10
+func (t *ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item) FromProjectUpgradeEligibilityResponseOutputValidationErrors10(v ProjectUpgradeEligibilityResponseOutputValidationErrors10) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeProjectUpgradeEligibilityResponseOutputValidationErrors10 performs a merge with any union data inside the ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item, using the provided ProjectUpgradeEligibilityResponseOutputValidationErrors10
+func (t *ProjectUpgradeEligibilityResponseOutput_ValidationErrors_Item) MergeProjectUpgradeEligibilityResponseOutputValidationErrors10(v ProjectUpgradeEligibilityResponseOutputValidationErrors10) error {
 	b, err := json.Marshal(v)
 	if err != nil {
 		return err
