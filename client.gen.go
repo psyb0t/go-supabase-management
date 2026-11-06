@@ -844,6 +844,20 @@ type ClientInterface interface {
 	// Corresponds with GET /v1/projects/{ref}/config/database/postgres (the `V1GetPostgresConfig` operationId).
 	V1GetPostgresConfig(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// V1PatchPostgresConfigWithBody Partially updates project's Postgres config
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+	V1PatchPostgresConfigWithBody(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// V1PatchPostgresConfig Partially updates project's Postgres config
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+	V1PatchPostgresConfig(ctx context.Context, ref string, body V1PatchPostgresConfigJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// V1UpdatePostgresConfigWithBody Updates project's Postgres config
 	//
 	// Takes any type of body and a specified content type.
@@ -3661,6 +3675,40 @@ func (c *Client) V1UpdatePoolerConfig(ctx context.Context, ref string, body V1Up
 // Corresponds with GET /v1/projects/{ref}/config/database/postgres (the `V1GetPostgresConfig` operationId).
 func (c *Client) V1GetPostgresConfig(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewV1GetPostgresConfigRequest(c.Server, ref)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// V1PatchPostgresConfigWithBody Partially updates project's Postgres config
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+func (c *Client) V1PatchPostgresConfigWithBody(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewV1PatchPostgresConfigRequestWithBody(c.Server, ref, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// V1PatchPostgresConfig Partially updates project's Postgres config
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+func (c *Client) V1PatchPostgresConfig(ctx context.Context, ref string, body V1PatchPostgresConfigJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewV1PatchPostgresConfigRequest(c.Server, ref, body)
 	if err != nil {
 		return nil, err
 	}
@@ -9890,6 +9938,53 @@ func NewV1GetPostgresConfigRequest(server string, ref string) (*http.Request, er
 	return req, nil
 }
 
+// NewV1PatchPostgresConfigRequest calls the generic V1PatchPostgresConfig builder with application/json body
+func NewV1PatchPostgresConfigRequest(server string, ref string, body V1PatchPostgresConfigJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewV1PatchPostgresConfigRequestWithBody(server, ref, "application/json", bodyReader)
+}
+
+// NewV1PatchPostgresConfigRequestWithBody constructs an http.Request for the V1PatchPostgresConfig method, with any body, and a specified content type
+func NewV1PatchPostgresConfigRequestWithBody(server string, ref string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "ref", ref, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects/%s/config/database/postgres", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewV1UpdatePostgresConfigRequest calls the generic V1UpdatePostgresConfig builder with application/json body
 func NewV1UpdatePostgresConfigRequest(server string, ref string, body V1UpdatePostgresConfigJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -14949,6 +15044,20 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with GET /v1/projects/{ref}/config/database/postgres (the `V1GetPostgresConfig` operationId).
 	V1GetPostgresConfigWithResponse(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*V1GetPostgresConfigResponse, error)
 
+	// V1PatchPostgresConfigWithBodyWithResponse Partially updates project's Postgres config
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+	V1PatchPostgresConfigWithBodyWithResponse(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*V1PatchPostgresConfigResponse, error)
+
+	// V1PatchPostgresConfigWithResponse Partially updates project's Postgres config
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+	V1PatchPostgresConfigWithResponse(ctx context.Context, ref string, body V1PatchPostgresConfigJSONRequestBody, reqEditors ...RequestEditorFn) (*V1PatchPostgresConfigResponse, error)
+
 	// V1UpdatePostgresConfigWithBodyWithResponse Updates project's Postgres config
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
@@ -19327,6 +19436,47 @@ func (r V1GetPostgresConfigResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r V1GetPostgresConfigResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type V1PatchPostgresConfigResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *PostgresConfigResponseOutput
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r V1PatchPostgresConfigResponse) GetJSON200() *PostgresConfigResponseOutput {
+	return r.JSON200
+}
+
+// GetBody returns the raw response body bytes
+func (r V1PatchPostgresConfigResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r V1PatchPostgresConfigResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r V1PatchPostgresConfigResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r V1PatchPostgresConfigResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -24351,6 +24501,32 @@ func (c *ClientWithResponses) V1GetPostgresConfigWithResponse(ctx context.Contex
 	return ParseV1GetPostgresConfigResponse(rsp)
 }
 
+// V1PatchPostgresConfigWithBodyWithResponse Partially updates project's Postgres config
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+func (c *ClientWithResponses) V1PatchPostgresConfigWithBodyWithResponse(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*V1PatchPostgresConfigResponse, error) {
+	rsp, err := c.V1PatchPostgresConfigWithBody(ctx, ref, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseV1PatchPostgresConfigResponse(rsp)
+}
+
+// V1PatchPostgresConfigWithResponse Partially updates project's Postgres config
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PATCH /v1/projects/{ref}/config/database/postgres (the `V1PatchPostgresConfig` operationId).
+func (c *ClientWithResponses) V1PatchPostgresConfigWithResponse(ctx context.Context, ref string, body V1PatchPostgresConfigJSONRequestBody, reqEditors ...RequestEditorFn) (*V1PatchPostgresConfigResponse, error) {
+	rsp, err := c.V1PatchPostgresConfig(ctx, ref, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseV1PatchPostgresConfigResponse(rsp)
+}
+
 // V1UpdatePostgresConfigWithBodyWithResponse Updates project's Postgres config
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
@@ -28938,6 +29114,44 @@ func ParseV1GetPostgresConfigResponse(rsp *http.Response) (*V1GetPostgresConfigR
 	}
 
 	response := &V1GetPostgresConfigResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PostgresConfigResponseOutput
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 401:
+		break // No content-type
+
+	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 429:
+		break // No content-type
+
+	case rsp.StatusCode == 500:
+		break // No content-type
+
+	}
+
+	return response, nil
+}
+
+// ParseV1PatchPostgresConfigResponse parses an HTTP response from a V1PatchPostgresConfigWithResponse call
+func ParseV1PatchPostgresConfigResponse(rsp *http.Response) (*V1PatchPostgresConfigResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &V1PatchPostgresConfigResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

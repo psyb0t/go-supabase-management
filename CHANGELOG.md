@@ -2,6 +2,13 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.4.1, 2026-11-06
+
+- Added the partial Postgres config update endpoint (`PATCH /v1/projects/{ref}/config/database/postgres`): `ClientInterface.V1PatchPostgresConfig` and `V1PatchPostgresConfigWithBody`, with matching methods on `Client`, `ClientWithResponses` (`V1PatchPostgresConfigWithResponse`, `V1PatchPostgresConfigWithBodyWithResponse`), and the helpers `NewV1PatchPostgresConfigRequest`, `NewV1PatchPostgresConfigRequestWithBody`, `ParseV1PatchPostgresConfigResponse`.
+- Added the response type `V1PatchPostgresConfigResponse` and the request body alias `V1PatchPostgresConfigJSONRequestBody` for `UpdatePostgresConfigBody`.
+- Added `ProjectRefs` (`*[]string`, `null` means all projects) and `Scope` (`*string`) to `OAuthTokenResponseOutput`.
+- Custom implementations of `ClientInterface` and `ClientWithResponsesInterface` must add the new `V1PatchPostgresConfig` methods.
+
 ## v0.4.0, 2026-11-05
 
 - Added the network restrictions review endpoint: `ClientInterface.V1ReviewNetworkRestrictions` and `V1ReviewNetworkRestrictionsWithBody`, with matching methods on `Client`, `ClientWithResponses` (`V1ReviewNetworkRestrictionsWithResponse`, `V1ReviewNetworkRestrictionsWithBodyWithResponse`), and the helpers `NewV1ReviewNetworkRestrictionsRequest`, `NewV1ReviewNetworkRestrictionsRequestWithBody`, `ParseV1ReviewNetworkRestrictionsResponse`.

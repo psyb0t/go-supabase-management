@@ -7390,9 +7390,17 @@ type OAuthTokenResponseOutput struct {
 	AccessToken string `json:"access_token"`
 	ExpiresIn   int    `json:"expires_in"`
 
+	// ProjectRefs Project refs the token is limited to. `null` means all projects.
+	ProjectRefs *[]string `json:"project_refs"`
+
 	// RefreshToken The `urn:ietf:params:oauth:grant-type:jwt-bearer` grant type issues access tokens only, no refresh token is returned and the token cannot be revoked via `/v1/oauth/revoke`.
-	RefreshToken *string                           `json:"refresh_token,omitempty"`
-	TokenType    OAuthTokenResponseOutputTokenType `json:"token_type"`
+	RefreshToken *string `json:"refresh_token,omitempty"`
+
+	// Scope Space-delimited scopes granted to the token. Omitted when no scopes were granted.
+	//
+	// Example: projects:read projects:write
+	Scope     *string                           `json:"scope,omitempty"`
+	TokenType OAuthTokenResponseOutputTokenType `json:"token_type"`
 }
 
 // OAuthTokenResponseOutputTokenType defines model for OAuthTokenResponseOutput.TokenType.
@@ -9950,6 +9958,9 @@ type V1CreateProjectTpaIntegrationJSONRequestBody = CreateThirdPartyAuthBody
 
 // V1UpdatePoolerConfigJSONRequestBody defines body for V1UpdatePoolerConfig for application/json ContentType.
 type V1UpdatePoolerConfigJSONRequestBody = UpdateSupavisorConfigBody
+
+// V1PatchPostgresConfigJSONRequestBody defines body for V1PatchPostgresConfig for application/json ContentType.
+type V1PatchPostgresConfigJSONRequestBody = UpdatePostgresConfigBody
 
 // V1UpdatePostgresConfigJSONRequestBody defines body for V1UpdatePostgresConfig for application/json ContentType.
 type V1UpdatePostgresConfigJSONRequestBody = UpdatePostgresConfigBody
