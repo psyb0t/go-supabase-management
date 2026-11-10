@@ -2,6 +2,11 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.5.0, 2026-11-10
+
+- Added `ProjectRef` (`*string`, query parameter `project_ref`) to `V1AuthorizeUserParams`. `NewV1AuthorizeUserRequest` sends it when set.
+- Breaking: the `Timestamp` field of the items in `V1GetUsageApiCountResponseOutput.Result` changed from `time.Time` to `string`. Code that reads it as a time must parse the string.
+
 ## v0.4.1, 2026-11-06
 
 - Added the partial Postgres config update endpoint (`PATCH /v1/projects/{ref}/config/database/postgres`): `ClientInterface.V1PatchPostgresConfig` and `V1PatchPostgresConfigWithBody`, with matching methods on `Client`, `ClientWithResponses` (`V1PatchPostgresConfigWithResponse`, `V1PatchPostgresConfigWithBodyWithResponse`), and the helpers `NewV1PatchPostgresConfigRequest`, `NewV1PatchPostgresConfigRequestWithBody`, `ParseV1PatchPostgresConfigResponse`.

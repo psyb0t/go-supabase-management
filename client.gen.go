@@ -6579,6 +6579,18 @@ func NewV1AuthorizeUserRequest(server string, params *V1AuthorizeUserParams) (*h
 
 		}
 
+		if params.ProjectRef != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project_ref", *params.ProjectRef, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
 		if params.TargetFlow != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "target_flow", *params.TargetFlow, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {

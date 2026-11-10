@@ -8980,11 +8980,11 @@ type V1GetMigrationResponseOutput struct {
 type V1GetUsageApiCountResponseOutput struct {
 	Error  *V1GetUsageApiCountResponseOutput_Error `json:"error,omitempty"`
 	Result *[]struct {
-		Timestamp             time.Time `json:"timestamp"`
-		TotalAuthRequests     float64   `json:"total_auth_requests"`
-		TotalRealtimeRequests float64   `json:"total_realtime_requests"`
-		TotalRestRequests     float64   `json:"total_rest_requests"`
-		TotalStorageRequests  float64   `json:"total_storage_requests"`
+		Timestamp             string  `json:"timestamp"`
+		TotalAuthRequests     float64 `json:"total_auth_requests"`
+		TotalRealtimeRequests float64 `json:"total_realtime_requests"`
+		TotalRestRequests     float64 `json:"total_rest_requests"`
+		TotalStorageRequests  float64 `json:"total_storage_requests"`
 	} `json:"result,omitempty"`
 }
 
@@ -9565,7 +9565,10 @@ type V1AuthorizeUserParams struct {
 
 	// OrganizationSlug Organization slug
 	OrganizationSlug *string `form:"organization_slug,omitempty" json:"organization_slug,omitempty"`
-	TargetFlow       *string `form:"target_flow,omitempty" json:"target_flow,omitempty"`
+
+	// ProjectRef Project ref
+	ProjectRef *string `form:"project_ref,omitempty" json:"project_ref,omitempty"`
+	TargetFlow *string `form:"target_flow,omitempty" json:"target_flow,omitempty"`
 
 	// Resource Resource indicator for MCP (Model Context Protocol) clients
 	Resource *string `form:"resource,omitempty" json:"resource,omitempty"`
