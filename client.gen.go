@@ -16304,11 +16304,18 @@ type V1UpdateABranchConfigResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *BranchResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r V1UpdateABranchConfigResponse) GetJSON200() *BranchResponseOutput {
 	return r.JSON200
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1UpdateABranchConfigResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -18277,11 +18284,18 @@ type V1CreateABranchResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *BranchResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r V1CreateABranchResponse) GetJSON201() *BranchResponseOutput {
 	return r.JSON201
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1CreateABranchResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -26552,6 +26566,13 @@ func ParseV1UpdateABranchConfigResponse(rsp *http.Response) (*V1UpdateABranchCon
 	case rsp.StatusCode == 401:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
+
 	case rsp.StatusCode == 403:
 		break // No content-type
 
@@ -28137,6 +28158,13 @@ func ParseV1CreateABranchResponse(rsp *http.Response) (*V1CreateABranchResponse,
 
 	case rsp.StatusCode == 401:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
 
 	case rsp.StatusCode == 403:
 		break // No content-type

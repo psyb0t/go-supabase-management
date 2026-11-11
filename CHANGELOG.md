@@ -2,6 +2,13 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.5.1, 2026-11-11
+
+- The Supabase Management API now documents a 402 response for creating and updating a branch. `V1CreateABranchResponse` and `V1UpdateABranchConfigResponse` have a new `JSON402` field (`*PlanGateErrorBody`) and a `GetJSON402` method.
+- `ParseV1CreateABranchResponse` and `ParseV1UpdateABranchConfigResponse` decode a JSON body on status 402 into `JSON402`.
+- Raised the Go requirement from 1.26.10 to 1.26.11 in `go.mod`, the development image and the setup notes of the agent skill. Go 1.26.11 fixes GO-2026-6859 in `net/http`, which `govulncheck` flagged.
+- No existing exported names changed.
+
 ## v0.5.0, 2026-11-10
 
 - Added `ProjectRef` (`*string`, query parameter `project_ref`) to `V1AuthorizeUserParams`. `NewV1AuthorizeUserRequest` sends it when set.
