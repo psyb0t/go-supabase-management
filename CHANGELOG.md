@@ -2,6 +2,14 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.5.2, 2026-11-12
+
+- Added `ExternalEmailMagicLinkDisabled` (`*bool`, `external_email_magic_link_disabled`) to `AuthConfigResponseOutput` and `UpdateAuthConfigBody`.
+- The Supabase Management API now documents a 402 response for ten endpoints. These response types have a new `JSON402` field (`*PlanGateErrorBody`) and a `GetJSON402` method: `V1BulkUpdateFunctionsResponse`, `V1CreateAFunctionResponse`, `V1CreateAProjectResponse`, `V1CreateProjectApiKeyResponse`, `V1DeployAFunctionResponse`, `V1ModifyDatabaseDiskResponse`, `V1RestoreAProjectResponse`, `V1UpdateAuthServiceConfigResponse`, `V1UpdateProjectApiKeyResponse` and `V1UpdateStorageConfigResponse`.
+- The matching `Parse...Response` functions decode a JSON body on status 402 into `JSON402`.
+- No existing exported names changed.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.5.1, 2026-11-11
 
 - The Supabase Management API now documents a 402 response for creating and updating a branch. `V1CreateABranchResponse` and `V1UpdateABranchConfigResponse` have a new `JSON402` field (`*PlanGateErrorBody`) and a `GetJSON402` method.

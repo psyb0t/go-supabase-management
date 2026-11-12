@@ -17096,11 +17096,18 @@ type V1CreateAProjectResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *V1ProjectResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r V1CreateAProjectResponse) GetJSON201() *V1ProjectResponseOutput {
 	return r.JSON201
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1CreateAProjectResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -17854,11 +17861,18 @@ type V1CreateProjectApiKeyResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *ApiKeyResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r V1CreateProjectApiKeyResponse) GetJSON201() *ApiKeyResponseOutput {
 	return r.JSON201
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1CreateProjectApiKeyResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -18059,11 +18073,18 @@ type V1UpdateProjectApiKeyResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *ApiKeyResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r V1UpdateProjectApiKeyResponse) GetJSON200() *ApiKeyResponseOutput {
 	return r.JSON200
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1UpdateProjectApiKeyResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -18612,11 +18633,18 @@ type V1UpdateAuthServiceConfigResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *AuthConfigResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r V1UpdateAuthServiceConfigResponse) GetJSON200() *AuthConfigResponseOutput {
 	return r.JSON200
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1UpdateAuthServiceConfigResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -19594,6 +19622,13 @@ func (r V1GetDatabaseDiskResponse) ContentType() string {
 type V1ModifyDatabaseDiskResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1ModifyDatabaseDiskResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -19860,6 +19895,13 @@ func (r V1GetStorageConfigResponse) ContentType() string {
 type V1UpdateStorageConfigResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1UpdateStorageConfigResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -21213,11 +21255,18 @@ type V1CreateAFunctionResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *FunctionResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r V1CreateAFunctionResponse) GetJSON201() *FunctionResponseOutput {
 	return r.JSON201
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1CreateAFunctionResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -21254,11 +21303,18 @@ type V1BulkUpdateFunctionsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *BulkUpdateFunctionResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r V1BulkUpdateFunctionsResponse) GetJSON200() *BulkUpdateFunctionResponseOutput {
 	return r.JSON200
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1BulkUpdateFunctionsResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -21295,11 +21351,18 @@ type V1DeployAFunctionResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *DeployFunctionResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r V1DeployAFunctionResponse) GetJSON201() *DeployFunctionResponseOutput {
 	return r.JSON201
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1DeployAFunctionResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -22317,6 +22380,13 @@ func (r V1ListAvailableRestoreVersionsResponse) ContentType() string {
 type V1RestoreAProjectResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1RestoreAProjectResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -27196,6 +27266,13 @@ func ParseV1CreateAProjectResponse(rsp *http.Response) (*V1CreateAProjectRespons
 	case rsp.StatusCode == 401:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
+
 	case rsp.StatusCode == 403:
 		break // No content-type
 
@@ -27816,6 +27893,13 @@ func ParseV1CreateProjectApiKeyResponse(rsp *http.Response) (*V1CreateProjectApi
 	case rsp.StatusCode == 401:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
+
 	case rsp.StatusCode == 403:
 		break // No content-type
 
@@ -27996,6 +28080,13 @@ func ParseV1UpdateProjectApiKeyResponse(rsp *http.Response) (*V1UpdateProjectApi
 
 	case rsp.StatusCode == 401:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
 
 	case rsp.StatusCode == 403:
 		break // No content-type
@@ -28441,6 +28532,13 @@ func ParseV1UpdateAuthServiceConfigResponse(rsp *http.Response) (*V1UpdateAuthSe
 
 	case rsp.StatusCode == 401:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
 
 	case rsp.StatusCode == 403:
 		break // No content-type
@@ -29310,6 +29408,31 @@ func ParseV1ModifyDatabaseDiskResponse(rsp *http.Response) (*V1ModifyDatabaseDis
 		HTTPResponse: rsp,
 	}
 
+	switch {
+	case rsp.StatusCode == 201:
+		break // No content-type
+
+	case rsp.StatusCode == 401:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
+
+	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 429:
+		break // No content-type
+
+	case rsp.StatusCode == 500:
+		break // No content-type
+
+	}
+
 	return response, nil
 }
 
@@ -29505,6 +29628,31 @@ func ParseV1UpdateStorageConfigResponse(rsp *http.Response) (*V1UpdateStorageCon
 	response := &V1UpdateStorageConfigResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		break // No content-type
+
+	case rsp.StatusCode == 401:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
+
+	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 429:
+		break // No content-type
+
+	case rsp.StatusCode == 500:
+		break // No content-type
+
 	}
 
 	return response, nil
@@ -30548,8 +30696,12 @@ func ParseV1CreateAFunctionResponse(rsp *http.Response) (*V1CreateAFunctionRespo
 	case rsp.StatusCode == 401:
 		break // No content-type
 
-	case rsp.StatusCode == 402:
-		break // No content-type
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
 
 	case rsp.StatusCode == 403:
 		break // No content-type
@@ -30589,8 +30741,12 @@ func ParseV1BulkUpdateFunctionsResponse(rsp *http.Response) (*V1BulkUpdateFuncti
 	case rsp.StatusCode == 401:
 		break // No content-type
 
-	case rsp.StatusCode == 402:
-		break // No content-type
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
 
 	case rsp.StatusCode == 403:
 		break // No content-type
@@ -30630,8 +30786,12 @@ func ParseV1DeployAFunctionResponse(rsp *http.Response) (*V1DeployAFunctionRespo
 	case rsp.StatusCode == 401:
 		break // No content-type
 
-	case rsp.StatusCode == 402:
-		break // No content-type
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
 
 	case rsp.StatusCode == 403:
 		break // No content-type
@@ -31476,6 +31636,28 @@ func ParseV1RestoreAProjectResponse(rsp *http.Response) (*V1RestoreAProjectRespo
 	response := &V1RestoreAProjectResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		break // No content-type
+
+	case rsp.StatusCode == 401:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
+
+	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 429:
+		break // No content-type
+
 	}
 
 	return response, nil

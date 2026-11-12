@@ -5913,6 +5913,7 @@ type AuthConfigResponseOutput struct {
 	ExternalDiscordEnabled                                *bool                                               `json:"external_discord_enabled"`
 	ExternalDiscordSecret                                 *string                                             `json:"external_discord_secret"`
 	ExternalEmailEnabled                                  *bool                                               `json:"external_email_enabled"`
+	ExternalEmailMagicLinkDisabled                        *bool                                               `json:"external_email_magic_link_disabled"`
 	ExternalFacebookClientId                              *string                                             `json:"external_facebook_client_id"`
 	ExternalFacebookEmailOptional                         *bool                                               `json:"external_facebook_email_optional"`
 	ExternalFacebookEnabled                               *bool                                               `json:"external_facebook_enabled"`
@@ -8224,6 +8225,7 @@ type UpdateAuthConfigBody struct {
 	ExternalDiscordEnabled                                *bool                                           `json:"external_discord_enabled,omitempty"`
 	ExternalDiscordSecret                                 *string                                         `json:"external_discord_secret,omitempty"`
 	ExternalEmailEnabled                                  *bool                                           `json:"external_email_enabled,omitempty"`
+	ExternalEmailMagicLinkDisabled                        *bool                                           `json:"external_email_magic_link_disabled,omitempty"`
 	ExternalFacebookClientId                              *string                                         `json:"external_facebook_client_id,omitempty"`
 	ExternalFacebookEmailOptional                         *bool                                           `json:"external_facebook_email_optional,omitempty"`
 	ExternalFacebookEnabled                               *bool                                           `json:"external_facebook_enabled,omitempty"`
