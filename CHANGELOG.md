@@ -2,6 +2,13 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.5.3, 2026-11-16
+
+- Added seven optional fields to `V1CreateProjectBody`: `AuthSiteUrl` (`*string`, `auth_site_url`), `DataApiExposedSchemas` (`*[]string`, `data_api_exposed_schemas`), `DataApiRevokeDefaultPrivileges` (`*bool`, `data_api_revoke_default_privileges`), `DataApiUseApiSchema` (`*bool`, `data_api_use_api_schema`), `DbSql` (`*string`, `db_sql`), `GithubInstallationId` (`*int`, `github_installation_id`) and `GithubRepositoryId` (`*int`, `github_repository_id`).
+- Added `DisableStatementTimeout` (`*bool`, `disable_statement_timeout`) to `V1ReadOnlyQueryBody` and `V1RunQueryBody`.
+- No existing exported names changed.
+- Generated from the Supabase Management API spec, still version 1.0.0.
+
 ## v0.5.2, 2026-11-12
 
 - Added `ExternalEmailMagicLinkDisabled` (`*bool`, `external_email_magic_link_disabled`) to `AuthConfigResponseOutput` and `UpdateAuthConfigBody`.

@@ -8880,11 +8880,32 @@ type V1CreateMigrationBody struct {
 
 // V1CreateProjectBody Example: {"db_pass":"correct-horse-battery-staple","name":"acme-prod","organization_slug":"tsrqponmlkjihgfedcba","region":"us-east-1"}
 type V1CreateProjectBody struct {
+	// AuthSiteUrl URL of the authentication site.
+	AuthSiteUrl *string `json:"auth_site_url,omitempty"`
+
+	// DataApiExposedSchemas Schemas exposed by the data API.
+	DataApiExposedSchemas *[]string `json:"data_api_exposed_schemas,omitempty"`
+
+	// DataApiRevokeDefaultPrivileges Force revoke default privileges for the data API. This flag will be ignored if the organization enforces `true` by default, and cannot be overridden.
+	DataApiRevokeDefaultPrivileges *bool `json:"data_api_revoke_default_privileges,omitempty"`
+
+	// DataApiUseApiSchema Whether to use the API schema for the data API.
+	DataApiUseApiSchema *bool `json:"data_api_use_api_schema,omitempty"`
+
 	// DbPass Database password
 	DbPass string `json:"db_pass"`
 
+	// DbSql Initial SQL to run on the database. Limited to 1024 characters (1 KiB). For complex database changes, please use migrations https://supabase.com/docs/guides/deployment/database-migrations
+	DbSql *string `json:"db_sql,omitempty"`
+
 	// DesiredInstanceSize Desired instance size. Omit this field to always default to the smallest possible size.
 	DesiredInstanceSize *V1CreateProjectBodyDesiredInstanceSize `json:"desired_instance_size,omitempty"`
+
+	// GithubInstallationId GitHub installation ID for linkage. Must first grant access to the repository on the Dashboard.
+	GithubInstallationId *int `json:"github_installation_id,omitempty"`
+
+	// GithubRepositoryId GitHub repository ID for linkage. Must first grant access to the repository on the Dashboard.
+	GithubRepositoryId *int `json:"github_repository_id,omitempty"`
 
 	// HighAvailability [Experimental] Whether to enable high availability for the project.
 	HighAvailability *bool `json:"high_availability,omitempty"`
@@ -9294,10 +9315,13 @@ type V1ProjectWithDatabaseResponseOutput struct {
 // V1ProjectWithDatabaseResponseOutputStatus defines model for V1ProjectWithDatabaseResponseOutput.Status.
 type V1ProjectWithDatabaseResponseOutputStatus string
 
-// V1ReadOnlyQueryBody Example: {"query":"select * from pg_stat_activity limit 1;"}
+// V1ReadOnlyQueryBody Example: {"disable_statement_timeout":false,"query":"select * from pg_stat_activity limit 1;"}
 type V1ReadOnlyQueryBody struct {
-	Parameters *[]interface{} `json:"parameters,omitempty"`
-	Query      string         `json:"query"`
+	// DisableStatementTimeout Disable statement timeout for the query. Role-based or global timeout
+	//         still apply https://supabase.com/docs/guides/database/postgres/timeouts
+	DisableStatementTimeout *bool          `json:"disable_statement_timeout,omitempty"`
+	Parameters              *[]interface{} `json:"parameters,omitempty"`
+	Query                   string         `json:"query"`
 }
 
 // V1RestoreBackupBody Example: {"id":12345}
@@ -9325,11 +9349,14 @@ type V1RestorePointResponse struct {
 // V1RestorePointResponseStatus defines model for V1RestorePointResponse.Status.
 type V1RestorePointResponseStatus string
 
-// V1RunQueryBody Example: {"query":"select * from pg_stat_activity limit 1;","read_only":true}
+// V1RunQueryBody Example: {"disable_statement_timeout":false,"query":"select * from pg_stat_activity limit 1;","read_only":true}
 type V1RunQueryBody struct {
-	Parameters *[]interface{} `json:"parameters,omitempty"`
-	Query      string         `json:"query"`
-	ReadOnly   *bool          `json:"read_only,omitempty"`
+	// DisableStatementTimeout Disable statement timeout for the query. Role-based or global timeout
+	//         still apply https://supabase.com/docs/guides/database/postgres/timeouts
+	DisableStatementTimeout *bool          `json:"disable_statement_timeout,omitempty"`
+	Parameters              *[]interface{} `json:"parameters,omitempty"`
+	Query                   string         `json:"query"`
+	ReadOnly                *bool          `json:"read_only,omitempty"`
 }
 
 // V1ServiceHealthResponseOutput defines model for V1ServiceHealthResponse_Output.
