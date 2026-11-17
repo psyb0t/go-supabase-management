@@ -2,6 +2,11 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.5.4, 2026-11-17
+
+- Added the project status value `RIGHTSIZING` to five enums: `BranchDetailResponseOutputStatusRIGHTSIZING`, `BranchResponseOutputPreviewProjectStatusRIGHTSIZING`, `OrganizationProjectsResponseOutputProjectsStatusRIGHTSIZING`, `V1ProjectResponseOutputStatusRIGHTSIZING` and `V1ProjectWithDatabaseResponseOutputStatusRIGHTSIZING`. Their `Valid` methods accept it.
+- No existing exported names changed.
+
 ## v0.5.3, 2026-11-16
 
 - Added seven optional fields to `V1CreateProjectBody`: `AuthSiteUrl` (`*string`, `auth_site_url`), `DataApiExposedSchemas` (`*[]string`, `data_api_exposed_schemas`), `DataApiRevokeDefaultPrivileges` (`*bool`, `data_api_revoke_default_privileges`), `DataApiUseApiSchema` (`*bool`, `data_api_use_api_schema`), `DbSql` (`*string`, `db_sql`), `GithubInstallationId` (`*int`, `github_installation_id`) and `GithubRepositoryId` (`*int`, `github_repository_id`).

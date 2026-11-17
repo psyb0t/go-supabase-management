@@ -384,6 +384,7 @@ const (
 	BranchDetailResponseOutputStatusRESTARTING      BranchDetailResponseOutputStatus = "RESTARTING"
 	BranchDetailResponseOutputStatusRESTOREFAILED   BranchDetailResponseOutputStatus = "RESTORE_FAILED"
 	BranchDetailResponseOutputStatusRESTORING       BranchDetailResponseOutputStatus = "RESTORING"
+	BranchDetailResponseOutputStatusRIGHTSIZING     BranchDetailResponseOutputStatus = "RIGHTSIZING"
 	BranchDetailResponseOutputStatusUNKNOWN         BranchDetailResponseOutputStatus = "UNKNOWN"
 	BranchDetailResponseOutputStatusUPGRADING       BranchDetailResponseOutputStatus = "UPGRADING"
 )
@@ -419,6 +420,8 @@ func (e BranchDetailResponseOutputStatus) Valid() bool {
 		return true
 	case BranchDetailResponseOutputStatusRESTORING:
 		return true
+	case BranchDetailResponseOutputStatusRIGHTSIZING:
+		return true
 	case BranchDetailResponseOutputStatusUNKNOWN:
 		return true
 	case BranchDetailResponseOutputStatusUPGRADING:
@@ -444,6 +447,7 @@ const (
 	BranchResponseOutputPreviewProjectStatusRESTARTING      BranchResponseOutputPreviewProjectStatus = "RESTARTING"
 	BranchResponseOutputPreviewProjectStatusRESTOREFAILED   BranchResponseOutputPreviewProjectStatus = "RESTORE_FAILED"
 	BranchResponseOutputPreviewProjectStatusRESTORING       BranchResponseOutputPreviewProjectStatus = "RESTORING"
+	BranchResponseOutputPreviewProjectStatusRIGHTSIZING     BranchResponseOutputPreviewProjectStatus = "RIGHTSIZING"
 	BranchResponseOutputPreviewProjectStatusUNKNOWN         BranchResponseOutputPreviewProjectStatus = "UNKNOWN"
 	BranchResponseOutputPreviewProjectStatusUPGRADING       BranchResponseOutputPreviewProjectStatus = "UPGRADING"
 )
@@ -478,6 +482,8 @@ func (e BranchResponseOutputPreviewProjectStatus) Valid() bool {
 	case BranchResponseOutputPreviewProjectStatusRESTOREFAILED:
 		return true
 	case BranchResponseOutputPreviewProjectStatusRESTORING:
+		return true
+	case BranchResponseOutputPreviewProjectStatusRIGHTSIZING:
 		return true
 	case BranchResponseOutputPreviewProjectStatusUNKNOWN:
 		return true
@@ -2517,6 +2523,7 @@ const (
 	OrganizationProjectsResponseOutputProjectsStatusRESTARTING      OrganizationProjectsResponseOutputProjectsStatus = "RESTARTING"
 	OrganizationProjectsResponseOutputProjectsStatusRESTOREFAILED   OrganizationProjectsResponseOutputProjectsStatus = "RESTORE_FAILED"
 	OrganizationProjectsResponseOutputProjectsStatusRESTORING       OrganizationProjectsResponseOutputProjectsStatus = "RESTORING"
+	OrganizationProjectsResponseOutputProjectsStatusRIGHTSIZING     OrganizationProjectsResponseOutputProjectsStatus = "RIGHTSIZING"
 	OrganizationProjectsResponseOutputProjectsStatusUNKNOWN         OrganizationProjectsResponseOutputProjectsStatus = "UNKNOWN"
 	OrganizationProjectsResponseOutputProjectsStatusUPGRADING       OrganizationProjectsResponseOutputProjectsStatus = "UPGRADING"
 )
@@ -2551,6 +2558,8 @@ func (e OrganizationProjectsResponseOutputProjectsStatus) Valid() bool {
 	case OrganizationProjectsResponseOutputProjectsStatusRESTOREFAILED:
 		return true
 	case OrganizationProjectsResponseOutputProjectsStatusRESTORING:
+		return true
+	case OrganizationProjectsResponseOutputProjectsStatusRIGHTSIZING:
 		return true
 	case OrganizationProjectsResponseOutputProjectsStatusUNKNOWN:
 		return true
@@ -5004,6 +5013,7 @@ const (
 	V1ProjectResponseOutputStatusRESTARTING      V1ProjectResponseOutputStatus = "RESTARTING"
 	V1ProjectResponseOutputStatusRESTOREFAILED   V1ProjectResponseOutputStatus = "RESTORE_FAILED"
 	V1ProjectResponseOutputStatusRESTORING       V1ProjectResponseOutputStatus = "RESTORING"
+	V1ProjectResponseOutputStatusRIGHTSIZING     V1ProjectResponseOutputStatus = "RIGHTSIZING"
 	V1ProjectResponseOutputStatusUNKNOWN         V1ProjectResponseOutputStatus = "UNKNOWN"
 	V1ProjectResponseOutputStatusUPGRADING       V1ProjectResponseOutputStatus = "UPGRADING"
 )
@@ -5039,6 +5049,8 @@ func (e V1ProjectResponseOutputStatus) Valid() bool {
 		return true
 	case V1ProjectResponseOutputStatusRESTORING:
 		return true
+	case V1ProjectResponseOutputStatusRIGHTSIZING:
+		return true
 	case V1ProjectResponseOutputStatusUNKNOWN:
 		return true
 	case V1ProjectResponseOutputStatusUPGRADING:
@@ -5064,6 +5076,7 @@ const (
 	V1ProjectWithDatabaseResponseOutputStatusRESTARTING      V1ProjectWithDatabaseResponseOutputStatus = "RESTARTING"
 	V1ProjectWithDatabaseResponseOutputStatusRESTOREFAILED   V1ProjectWithDatabaseResponseOutputStatus = "RESTORE_FAILED"
 	V1ProjectWithDatabaseResponseOutputStatusRESTORING       V1ProjectWithDatabaseResponseOutputStatus = "RESTORING"
+	V1ProjectWithDatabaseResponseOutputStatusRIGHTSIZING     V1ProjectWithDatabaseResponseOutputStatus = "RIGHTSIZING"
 	V1ProjectWithDatabaseResponseOutputStatusUNKNOWN         V1ProjectWithDatabaseResponseOutputStatus = "UNKNOWN"
 	V1ProjectWithDatabaseResponseOutputStatusUPGRADING       V1ProjectWithDatabaseResponseOutputStatus = "UPGRADING"
 )
@@ -5098,6 +5111,8 @@ func (e V1ProjectWithDatabaseResponseOutputStatus) Valid() bool {
 	case V1ProjectWithDatabaseResponseOutputStatusRESTOREFAILED:
 		return true
 	case V1ProjectWithDatabaseResponseOutputStatusRESTORING:
+		return true
+	case V1ProjectWithDatabaseResponseOutputStatusRIGHTSIZING:
 		return true
 	case V1ProjectWithDatabaseResponseOutputStatusUNKNOWN:
 		return true
