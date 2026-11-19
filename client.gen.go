@@ -462,16 +462,50 @@ type ClientInterface interface {
 	//
 	// Executes an SQL or LQL query on the project's unified logs stream.
 	//
-	// Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
-	// If both are not provided, only the last 1 minute of logs will be queried.
-	// The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+	//   Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+	//   If both are not provided, only the last 1 minute of logs will be queried.
+	//   The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
 	//
-	// Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+	//   Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
 	//
-	// Note: SQL must be written in **ClickHouse SQL dialect**.
+	//   Note: SQL must be written in **ClickHouse SQL dialect**.
 	//
 	// Corresponds with GET /v1/projects/{ref}/analytics/endpoints/logs (the `V1GetProjectLogs` operationId).
 	V1GetProjectLogs(ctx context.Context, ref string, params *V1GetProjectLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// V1PostProjectLogsWithBody Gets all project's logs in a single log stream
+	//
+	// Executes an SQL or LQL query on the project's unified logs stream.
+	//
+	//   Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+	//   If both are not provided, only the last 1 minute of logs will be queried.
+	//   The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+	//
+	//   Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+	//
+	//   Note: SQL must be written in **ClickHouse SQL dialect**.
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+	V1PostProjectLogsWithBody(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// V1PostProjectLogs Gets all project's logs in a single log stream
+	//
+	// Executes an SQL or LQL query on the project's unified logs stream.
+	//
+	//   Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+	//   If both are not provided, only the last 1 minute of logs will be queried.
+	//   The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+	//
+	//   Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+	//
+	//   Note: SQL must be written in **ClickHouse SQL dialect**.
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+	V1PostProjectLogs(ctx context.Context, ref string, body V1PostProjectLogsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// V1GetProjectLogsAll Gets project's logs
 	//
@@ -1328,6 +1362,11 @@ type ClientInterface interface {
 	//
 	// Corresponds with POST /v1/projects/{ref}/database/webhooks/enable (the `V1EnableDatabaseWebhook` operationId).
 	V1EnableDatabaseWebhook(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// V1DeleteAllFunctions Deletes all Edge Functions from a project
+	//
+	// Corresponds with DELETE /v1/projects/{ref}/functions (the `V1DeleteAllFunctions` operationId).
+	V1DeleteAllFunctions(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// V1ListAllFunctions List all functions
 	//
@@ -2724,17 +2763,71 @@ func (c *Client) V1GetProjectFunctionCombinedStats(ctx context.Context, ref stri
 //
 // Executes an SQL or LQL query on the project's unified logs stream.
 //
-// Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
-// If both are not provided, only the last 1 minute of logs will be queried.
-// The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+//	Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+//	If both are not provided, only the last 1 minute of logs will be queried.
+//	The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
 //
-// Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+//	Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
 //
-// Note: SQL must be written in **ClickHouse SQL dialect**.
+//	Note: SQL must be written in **ClickHouse SQL dialect**.
 //
 // Corresponds with GET /v1/projects/{ref}/analytics/endpoints/logs (the `V1GetProjectLogs` operationId).
 func (c *Client) V1GetProjectLogs(ctx context.Context, ref string, params *V1GetProjectLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewV1GetProjectLogsRequest(c.Server, ref, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// V1PostProjectLogsWithBody Gets all project's logs in a single log stream
+//
+// Executes an SQL or LQL query on the project's unified logs stream.
+//
+//	Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+//	If both are not provided, only the last 1 minute of logs will be queried.
+//	The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+//
+//	Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+//
+//	Note: SQL must be written in **ClickHouse SQL dialect**.
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+func (c *Client) V1PostProjectLogsWithBody(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewV1PostProjectLogsRequestWithBody(c.Server, ref, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// V1PostProjectLogs Gets all project's logs in a single log stream
+//
+// Executes an SQL or LQL query on the project's unified logs stream.
+//
+//	Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+//	If both are not provided, only the last 1 minute of logs will be queried.
+//	The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+//
+//	Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+//
+//	Note: SQL must be written in **ClickHouse SQL dialect**.
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+func (c *Client) V1PostProjectLogs(ctx context.Context, ref string, body V1PostProjectLogsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewV1PostProjectLogsRequest(c.Server, ref, body)
 	if err != nil {
 		return nil, err
 	}
@@ -4810,6 +4903,21 @@ func (c *Client) V1ReadOnlyQuery(ctx context.Context, ref string, body V1ReadOnl
 // Corresponds with POST /v1/projects/{ref}/database/webhooks/enable (the `V1EnableDatabaseWebhook` operationId).
 func (c *Client) V1EnableDatabaseWebhook(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewV1EnableDatabaseWebhookRequest(c.Server, ref)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// V1DeleteAllFunctions Deletes all Edge Functions from a project
+//
+// Corresponds with DELETE /v1/projects/{ref}/functions (the `V1DeleteAllFunctions` operationId).
+func (c *Client) V1DeleteAllFunctions(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewV1DeleteAllFunctionsRequest(c.Server, ref)
 	if err != nil {
 		return nil, err
 	}
@@ -7924,6 +8032,18 @@ func NewV1GetProjectLogsRequest(server string, ref string, params *V1GetProjectL
 
 		}
 
+		if params.Lql != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "lql", *params.Lql, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
 		if params.IsoTimestampStart != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "iso_timestamp_start", *params.IsoTimestampStart, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
@@ -7958,6 +8078,53 @@ func NewV1GetProjectLogsRequest(server string, ref string, params *V1GetProjectL
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewV1PostProjectLogsRequest calls the generic V1PostProjectLogs builder with application/json body
+func NewV1PostProjectLogsRequest(server string, ref string, body V1PostProjectLogsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewV1PostProjectLogsRequestWithBody(server, ref, "application/json", bodyReader)
+}
+
+// NewV1PostProjectLogsRequestWithBody constructs an http.Request for the V1PostProjectLogs method, with any body, and a specified content type
+func NewV1PostProjectLogsRequestWithBody(server string, ref string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "ref", ref, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects/%s/analytics/endpoints/logs", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -11881,6 +12048,40 @@ func NewV1EnableDatabaseWebhookRequest(server string, ref string) (*http.Request
 	return req, nil
 }
 
+// NewV1DeleteAllFunctionsRequest constructs an http.Request for the V1DeleteAllFunctions method
+func NewV1DeleteAllFunctionsRequest(server string, ref string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "ref", ref, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects/%s/functions", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewV1ListAllFunctionsRequest constructs an http.Request for the V1ListAllFunctions method
 func NewV1ListAllFunctionsRequest(server string, ref string) (*http.Request, error) {
 	var err error
@@ -14606,18 +14807,52 @@ type ClientWithResponsesInterface interface {
 	//
 	// Executes an SQL or LQL query on the project's unified logs stream.
 	//
-	// Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
-	// If both are not provided, only the last 1 minute of logs will be queried.
-	// The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+	//   Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+	//   If both are not provided, only the last 1 minute of logs will be queried.
+	//   The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
 	//
-	// Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+	//   Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
 	//
-	// Note: SQL must be written in **ClickHouse SQL dialect**.
+	//   Note: SQL must be written in **ClickHouse SQL dialect**.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
 	// Corresponds with GET /v1/projects/{ref}/analytics/endpoints/logs (the `V1GetProjectLogs` operationId).
 	V1GetProjectLogsWithResponse(ctx context.Context, ref string, params *V1GetProjectLogsParams, reqEditors ...RequestEditorFn) (*V1GetProjectLogsResponse, error)
+
+	// V1PostProjectLogsWithBodyWithResponse Gets all project's logs in a single log stream
+	//
+	// Executes an SQL or LQL query on the project's unified logs stream.
+	//
+	//   Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+	//   If both are not provided, only the last 1 minute of logs will be queried.
+	//   The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+	//
+	//   Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+	//
+	//   Note: SQL must be written in **ClickHouse SQL dialect**.
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+	V1PostProjectLogsWithBodyWithResponse(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*V1PostProjectLogsResponse, error)
+
+	// V1PostProjectLogsWithResponse Gets all project's logs in a single log stream
+	//
+	// Executes an SQL or LQL query on the project's unified logs stream.
+	//
+	//   Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+	//   If both are not provided, only the last 1 minute of logs will be queried.
+	//   The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+	//
+	//   Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+	//
+	//   Note: SQL must be written in **ClickHouse SQL dialect**.
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+	V1PostProjectLogsWithResponse(ctx context.Context, ref string, body V1PostProjectLogsJSONRequestBody, reqEditors ...RequestEditorFn) (*V1PostProjectLogsResponse, error)
 
 	// V1GetProjectLogsAllWithResponse Gets project's logs
 	//
@@ -15586,6 +15821,13 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with POST /v1/projects/{ref}/database/webhooks/enable (the `V1EnableDatabaseWebhook` operationId).
 	V1EnableDatabaseWebhookWithResponse(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*V1EnableDatabaseWebhookResponse, error)
+
+	// V1DeleteAllFunctionsWithResponse Deletes all Edge Functions from a project
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with DELETE /v1/projects/{ref}/functions (the `V1DeleteAllFunctions` operationId).
+	V1DeleteAllFunctionsWithResponse(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*V1DeleteAllFunctionsResponse, error)
 
 	// V1ListAllFunctionsWithResponse List all functions
 	//
@@ -17665,6 +17907,47 @@ func (r V1GetProjectLogsResponse) ContentType() string {
 	return ""
 }
 
+type V1PostProjectLogsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *AnalyticsResponseOutput
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r V1PostProjectLogsResponse) GetJSON200() *AnalyticsResponseOutput {
+	return r.JSON200
+}
+
+// GetBody returns the raw response body bytes
+func (r V1PostProjectLogsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r V1PostProjectLogsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r V1PostProjectLogsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r V1PostProjectLogsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type V1GetProjectLogsAllResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -19009,11 +19292,18 @@ type V1CreateASsoProviderResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *CreateProviderResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r V1CreateASsoProviderResponse) GetJSON201() *CreateProviderResponseOutput {
 	return r.JSON201
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1CreateASsoProviderResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -19132,11 +19422,18 @@ type V1UpdateASsoProviderResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *UpdateProviderResponseOutput
+	// JSON402 the response for an HTTP 402 `application/json` response
+	JSON402 *PlanGateErrorBody
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r V1UpdateASsoProviderResponse) GetJSON200() *UpdateProviderResponseOutput {
 	return r.JSON200
+}
+
+// GetJSON402 returns the response for an HTTP 402 `application/json` response
+func (r V1UpdateASsoProviderResponse) GetJSON402() *PlanGateErrorBody {
+	return r.JSON402
 }
 
 // GetBody returns the raw response body bytes
@@ -21203,6 +21500,40 @@ func (r V1EnableDatabaseWebhookResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r V1EnableDatabaseWebhookResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type V1DeleteAllFunctionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+}
+
+// GetBody returns the raw response body bytes
+func (r V1DeleteAllFunctionsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r V1DeleteAllFunctionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r V1DeleteAllFunctionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r V1DeleteAllFunctionsResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -23799,13 +24130,13 @@ func (c *ClientWithResponses) V1GetProjectFunctionCombinedStatsWithResponse(ctx 
 //
 // Executes an SQL or LQL query on the project's unified logs stream.
 //
-// Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
-// If both are not provided, only the last 1 minute of logs will be queried.
-// The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+//	Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+//	If both are not provided, only the last 1 minute of logs will be queried.
+//	The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
 //
-// Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+//	Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
 //
-// Note: SQL must be written in **ClickHouse SQL dialect**.
+//	Note: SQL must be written in **ClickHouse SQL dialect**.
 //
 // Returns a wrapper object for the known response body format(s).
 //
@@ -23816,6 +24147,52 @@ func (c *ClientWithResponses) V1GetProjectLogsWithResponse(ctx context.Context, 
 		return nil, err
 	}
 	return ParseV1GetProjectLogsResponse(rsp)
+}
+
+// V1PostProjectLogsWithBodyWithResponse Gets all project's logs in a single log stream
+//
+// Executes an SQL or LQL query on the project's unified logs stream.
+//
+//	Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+//	If both are not provided, only the last 1 minute of logs will be queried.
+//	The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+//
+//	Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+//
+//	Note: SQL must be written in **ClickHouse SQL dialect**.
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+func (c *ClientWithResponses) V1PostProjectLogsWithBodyWithResponse(ctx context.Context, ref string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*V1PostProjectLogsResponse, error) {
+	rsp, err := c.V1PostProjectLogsWithBody(ctx, ref, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseV1PostProjectLogsResponse(rsp)
+}
+
+// V1PostProjectLogsWithResponse Gets all project's logs in a single log stream
+//
+// Executes an SQL or LQL query on the project's unified logs stream.
+//
+//	Either the `iso_timestamp_start` and `iso_timestamp_end` parameters must be provided.
+//	If both are not provided, only the last 1 minute of logs will be queried.
+//	The timestamp range must be no more than 24 hours and is rounded to the nearest minute. If the range is more than 24 hours, a validation error will be thrown.
+//
+//	Filter by the `source` column to specify specific log sources, such as edge_logs, postgres_logs, etc.
+//
+//	Note: SQL must be written in **ClickHouse SQL dialect**.
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/projects/{ref}/analytics/endpoints/logs (the `V1PostProjectLogs` operationId).
+func (c *ClientWithResponses) V1PostProjectLogsWithResponse(ctx context.Context, ref string, body V1PostProjectLogsJSONRequestBody, reqEditors ...RequestEditorFn) (*V1PostProjectLogsResponse, error) {
+	rsp, err := c.V1PostProjectLogs(ctx, ref, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseV1PostProjectLogsResponse(rsp)
 }
 
 // V1GetProjectLogsAllWithResponse Gets project's logs
@@ -25516,6 +25893,19 @@ func (c *ClientWithResponses) V1EnableDatabaseWebhookWithResponse(ctx context.Co
 		return nil, err
 	}
 	return ParseV1EnableDatabaseWebhookResponse(rsp)
+}
+
+// V1DeleteAllFunctionsWithResponse Deletes all Edge Functions from a project
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with DELETE /v1/projects/{ref}/functions (the `V1DeleteAllFunctions` operationId).
+func (c *ClientWithResponses) V1DeleteAllFunctionsWithResponse(ctx context.Context, ref string, reqEditors ...RequestEditorFn) (*V1DeleteAllFunctionsResponse, error) {
+	rsp, err := c.V1DeleteAllFunctions(ctx, ref, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseV1DeleteAllFunctionsResponse(rsp)
 }
 
 // V1ListAllFunctionsWithResponse List all functions
@@ -27726,6 +28116,44 @@ func ParseV1GetProjectLogsResponse(rsp *http.Response) (*V1GetProjectLogsRespons
 	return response, nil
 }
 
+// ParseV1PostProjectLogsResponse parses an HTTP response from a V1PostProjectLogsWithResponse call
+func ParseV1PostProjectLogsResponse(rsp *http.Response) (*V1PostProjectLogsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &V1PostProjectLogsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest AnalyticsResponseOutput
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 401:
+		break // No content-type
+
+	case rsp.StatusCode == 402:
+		break // No content-type
+
+	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 429:
+		break // No content-type
+
+	}
+
+	return response, nil
+}
+
 // ParseV1GetProjectLogsAllResponse parses an HTTP response from a V1GetProjectLogsAllWithResponse call
 func ParseV1GetProjectLogsAllResponse(rsp *http.Response) (*V1GetProjectLogsAllResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -28861,6 +29289,13 @@ func ParseV1CreateASsoProviderResponse(rsp *http.Response) (*V1CreateASsoProvide
 	case rsp.StatusCode == 401:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
+
 	case rsp.StatusCode == 403:
 		break // No content-type
 
@@ -28974,6 +29409,13 @@ func ParseV1UpdateASsoProviderResponse(rsp *http.Response) (*V1UpdateASsoProvide
 
 	case rsp.StatusCode == 401:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 402:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON402 = &dest
 
 	case rsp.StatusCode == 403:
 		break // No content-type
@@ -30627,6 +31069,22 @@ func ParseV1EnableDatabaseWebhookResponse(rsp *http.Response) (*V1EnableDatabase
 	}
 
 	response := &V1EnableDatabaseWebhookResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	return response, nil
+}
+
+// ParseV1DeleteAllFunctionsResponse parses an HTTP response from a V1DeleteAllFunctionsWithResponse call
+func ParseV1DeleteAllFunctionsResponse(rsp *http.Response) (*V1DeleteAllFunctionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &V1DeleteAllFunctionsResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

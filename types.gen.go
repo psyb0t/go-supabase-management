@@ -6358,10 +6358,13 @@ type CreateProviderBody struct {
 			Names   *[]string                                         `json:"names,omitempty"`
 		} `json:"keys"`
 	} `json:"attribute_mapping,omitempty"`
-	Domains      *[]string                       `json:"domains,omitempty"`
-	MetadataUrl  *string                         `json:"metadata_url,omitempty"`
-	MetadataXml  *string                         `json:"metadata_xml,omitempty"`
-	NameIdFormat *CreateProviderBodyNameIdFormat `json:"name_id_format,omitempty"`
+
+	// DedicatedScope When `true`, the provider's SAML ACS URL and entity ID are scoped to its own provider ID instead of the ones shared by all SAML providers in the project. The same signing key is still used. This cannot be changed once the provider is created.
+	DedicatedScope *bool                           `json:"dedicated_scope,omitempty"`
+	Domains        *[]string                       `json:"domains,omitempty"`
+	MetadataUrl    *string                         `json:"metadata_url,omitempty"`
+	MetadataXml    *string                         `json:"metadata_xml,omitempty"`
+	NameIdFormat   *CreateProviderBodyNameIdFormat `json:"name_id_format,omitempty"`
 
 	// Type What type of provider will be created
 	Type CreateProviderBodyType `json:"type"`
@@ -6408,10 +6411,11 @@ type CreateProviderResponseOutput struct {
 				Names   *[]string                                                        `json:"names,omitempty"`
 			} `json:"keys"`
 		} `json:"attribute_mapping,omitempty"`
-		EntityId     string                                        `json:"entity_id"`
-		MetadataUrl  *string                                       `json:"metadata_url,omitempty"`
-		MetadataXml  *string                                       `json:"metadata_xml,omitempty"`
-		NameIdFormat *CreateProviderResponseOutputSamlNameIdFormat `json:"name_id_format,omitempty"`
+		DedicatedScope *bool                                         `json:"dedicated_scope,omitempty"`
+		EntityId       string                                        `json:"entity_id"`
+		MetadataUrl    *string                                       `json:"metadata_url,omitempty"`
+		MetadataXml    *string                                       `json:"metadata_xml,omitempty"`
+		NameIdFormat   *CreateProviderResponseOutputSamlNameIdFormat `json:"name_id_format,omitempty"`
 	} `json:"saml,omitempty"`
 	UpdatedAt *string `json:"updated_at,omitempty"`
 }
@@ -6641,10 +6645,11 @@ type DeleteProviderResponseOutput struct {
 				Names   *[]string                                                        `json:"names,omitempty"`
 			} `json:"keys"`
 		} `json:"attribute_mapping,omitempty"`
-		EntityId     string                                        `json:"entity_id"`
-		MetadataUrl  *string                                       `json:"metadata_url,omitempty"`
-		MetadataXml  *string                                       `json:"metadata_xml,omitempty"`
-		NameIdFormat *DeleteProviderResponseOutputSamlNameIdFormat `json:"name_id_format,omitempty"`
+		DedicatedScope *bool                                         `json:"dedicated_scope,omitempty"`
+		EntityId       string                                        `json:"entity_id"`
+		MetadataUrl    *string                                       `json:"metadata_url,omitempty"`
+		MetadataXml    *string                                       `json:"metadata_xml,omitempty"`
+		NameIdFormat   *DeleteProviderResponseOutputSamlNameIdFormat `json:"name_id_format,omitempty"`
 	} `json:"saml,omitempty"`
 	UpdatedAt *string `json:"updated_at,omitempty"`
 }
@@ -6877,10 +6882,11 @@ type GetProviderResponseOutput struct {
 				Names   *[]string                                                     `json:"names,omitempty"`
 			} `json:"keys"`
 		} `json:"attribute_mapping,omitempty"`
-		EntityId     string                                     `json:"entity_id"`
-		MetadataUrl  *string                                    `json:"metadata_url,omitempty"`
-		MetadataXml  *string                                    `json:"metadata_xml,omitempty"`
-		NameIdFormat *GetProviderResponseOutputSamlNameIdFormat `json:"name_id_format,omitempty"`
+		DedicatedScope *bool                                      `json:"dedicated_scope,omitempty"`
+		EntityId       string                                     `json:"entity_id"`
+		MetadataUrl    *string                                    `json:"metadata_url,omitempty"`
+		MetadataXml    *string                                    `json:"metadata_xml,omitempty"`
+		NameIdFormat   *GetProviderResponseOutputSamlNameIdFormat `json:"name_id_format,omitempty"`
 	} `json:"saml,omitempty"`
 	UpdatedAt *string `json:"updated_at,omitempty"`
 }
@@ -7224,10 +7230,11 @@ type ListProvidersResponseOutput struct {
 					Names   *[]string                                                             `json:"names,omitempty"`
 				} `json:"keys"`
 			} `json:"attribute_mapping,omitempty"`
-			EntityId     string                                            `json:"entity_id"`
-			MetadataUrl  *string                                           `json:"metadata_url,omitempty"`
-			MetadataXml  *string                                           `json:"metadata_xml,omitempty"`
-			NameIdFormat *ListProvidersResponseOutputItemsSamlNameIdFormat `json:"name_id_format,omitempty"`
+			DedicatedScope *bool                                             `json:"dedicated_scope,omitempty"`
+			EntityId       string                                            `json:"entity_id"`
+			MetadataUrl    *string                                           `json:"metadata_url,omitempty"`
+			MetadataXml    *string                                           `json:"metadata_xml,omitempty"`
+			NameIdFormat   *ListProvidersResponseOutputItemsSamlNameIdFormat `json:"name_id_format,omitempty"`
 		} `json:"saml,omitempty"`
 		UpdatedAt *string `json:"updated_at,omitempty"`
 	} `json:"items"`
@@ -9177,6 +9184,27 @@ type V1PgbouncerConfigResponseOutput struct {
 // V1PgbouncerConfigResponseOutputPoolMode defines model for V1PgbouncerConfigResponseOutput.PoolMode.
 type V1PgbouncerConfigResponseOutputPoolMode string
 
+// V1PostProjectLogsBody Request body for searching project logs with POST body
+//
+// Example: {"iso_timestamp_end":"2025-03-01T23:59:59Z","iso_timestamp_start":"2025-03-01T00:00:00Z","sql":"select event_message from edge_logs limit 10"}
+type V1PostProjectLogsBody struct {
+	// IsoTimestampEnd Example: 2025-03-01T23:59:59Z
+	IsoTimestampEnd *time.Time `json:"iso_timestamp_end,omitempty"`
+
+	// IsoTimestampStart Example: 2025-03-01T00:00:00Z
+	IsoTimestampStart *time.Time `json:"iso_timestamp_start,omitempty"`
+
+	// Lql Custom LQL query to execute on the logs. See [querying logs](https://supabase.com/docs/guides/monitoring-and-debugging/logs#querying-with-the-logs-explorer) for more details.
+	//
+	// Example: s:event_message
+	Lql *string `json:"lql,omitempty"`
+
+	// Sql Custom SQL query to execute on the logs. See [querying logs](https://supabase.com/docs/guides/monitoring-and-debugging/logs#querying-with-the-logs-explorer) for more details.
+	//
+	// Example: select event_message from edge_logs limit 10
+	Sql *string `json:"sql,omitempty"`
+}
+
 // V1PostgrestConfigResponseOutput defines model for V1PostgrestConfigResponse_Output.
 type V1PostgrestConfigResponseOutput struct {
 	DbExtraSearchPath string `json:"db_extra_search_path"`
@@ -9710,7 +9738,10 @@ type V1GetProjectFunctionCombinedStatsParamsInterval string
 // V1GetProjectLogsParams defines parameters for V1GetProjectLogs.
 type V1GetProjectLogsParams struct {
 	// Sql Custom SQL query to execute on the logs. See [querying logs](https://supabase.com/docs/guides/monitoring-and-debugging/logs#querying-with-the-logs-explorer) for more details.
-	Sql               *string    `form:"sql,omitempty" json:"sql,omitempty"`
+	Sql *string `form:"sql,omitempty" json:"sql,omitempty"`
+
+	// Lql Custom LQL query to execute on the logs. See [querying logs](https://supabase.com/docs/guides/monitoring-and-debugging/logs#querying-with-the-logs-explorer) for more details.
+	Lql               *string    `form:"lql,omitempty" json:"lql,omitempty"`
 	IsoTimestampStart *time.Time `form:"iso_timestamp_start,omitempty" json:"iso_timestamp_start,omitempty"`
 	IsoTimestampEnd   *time.Time `form:"iso_timestamp_end,omitempty" json:"iso_timestamp_end,omitempty"`
 }
@@ -9969,6 +10000,9 @@ type V1UpdateAProjectJSONRequestBody = V1UpdateProjectBody
 
 // V1UpdateActionRunStatusJSONRequestBody defines body for V1UpdateActionRunStatus for application/json ContentType.
 type V1UpdateActionRunStatusJSONRequestBody = UpdateRunStatusBody
+
+// V1PostProjectLogsJSONRequestBody defines body for V1PostProjectLogs for application/json ContentType.
+type V1PostProjectLogsJSONRequestBody = V1PostProjectLogsBody
 
 // V1CreateProjectApiKeyJSONRequestBody defines body for V1CreateProjectApiKey for application/json ContentType.
 type V1CreateProjectApiKeyJSONRequestBody = CreateApiKeyBody

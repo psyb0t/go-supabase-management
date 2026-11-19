@@ -2,6 +2,17 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.6.0, 2026-11-19
+
+- Added the log query endpoint `POST /v1/projects/{ref}/analytics/endpoints/logs`: `ClientInterface.V1PostProjectLogs` and `V1PostProjectLogsWithBody`, with matching methods on `Client`, `ClientWithResponses` (`V1PostProjectLogsWithResponse`, `V1PostProjectLogsWithBodyWithResponse`), and the helpers `NewV1PostProjectLogsRequest`, `NewV1PostProjectLogsRequestWithBody`, `ParseV1PostProjectLogsResponse`.
+- Added the response type `V1PostProjectLogsResponse`, the body type `V1PostProjectLogsBody` and the alias `V1PostProjectLogsJSONRequestBody`.
+- Added `Lql` (`*string`, query parameter `lql`) to `V1GetProjectLogsParams`. `NewV1GetProjectLogsRequest` sends it when set.
+- Added the endpoint `DELETE /v1/projects/{ref}/functions` that deletes all Edge Functions of a project: `ClientInterface.V1DeleteAllFunctions`, `Client.V1DeleteAllFunctions`, `ClientWithResponses.V1DeleteAllFunctionsWithResponse`, `NewV1DeleteAllFunctionsRequest`, `ParseV1DeleteAllFunctionsResponse` and the response type `V1DeleteAllFunctionsResponse`.
+- Added `DedicatedScope` (`*bool`, `dedicated_scope`) to `CreateProviderBody` and to the `Saml` object of `CreateProviderResponseOutput`, `DeleteProviderResponseOutput`, `GetProviderResponseOutput` and the items of `ListProvidersResponseOutput`. These response fields are anonymous structs, so code that builds those struct types by hand must add the field.
+- Added a `JSON402` field (`*PlanGateErrorBody`) and a `GetJSON402` method to `V1CreateASsoProviderResponse` and `V1UpdateASsoProviderResponse`.
+- Breaking for custom implementations: `ClientInterface` and `ClientWithResponsesInterface` have new methods (`V1PostProjectLogs`, `V1PostProjectLogsWithBody`, `V1DeleteAllFunctions` and the matching `WithResponse` methods), so custom implementations must add them.
+- Reformatted the doc comments of `V1GetProjectLogs`. No behavior change.
+
 ## v0.5.4, 2026-11-17
 
 - Added the project status value `RIGHTSIZING` to five enums: `BranchDetailResponseOutputStatusRIGHTSIZING`, `BranchResponseOutputPreviewProjectStatusRIGHTSIZING`, `OrganizationProjectsResponseOutputProjectsStatusRIGHTSIZING`, `V1ProjectResponseOutputStatusRIGHTSIZING` and `V1ProjectWithDatabaseResponseOutputStatusRIGHTSIZING`. Their `Valid` methods accept it.
