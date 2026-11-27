@@ -7546,7 +7546,7 @@ type PlanGateErrorBody struct {
 		// Feature Entitlement feature key that failed the check
 		Feature string `json:"feature"`
 
-		// UpgradeUrl Billing page URL for the organization, present when the org is resolvable
+		// UpgradeUrl Dashboard URL where the feature can be unlocked: the organization billing page, or the project add-ons page when a per-project add-on is missing. Present when the organization or project is resolvable
 		UpgradeUrl *string `json:"upgrade_url,omitempty"`
 	} `json:"error,omitempty"`
 

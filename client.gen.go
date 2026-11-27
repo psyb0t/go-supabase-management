@@ -20506,6 +20506,13 @@ func (r V1RestorePhysicalBackupResponse) ContentType() string {
 type V1RestorePitrBackupResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *PlanGateErrorBody
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r V1RestorePitrBackupResponse) GetJSON400() *PlanGateErrorBody {
+	return r.JSON400
 }
 
 // GetBody returns the raw response body bytes
@@ -30333,6 +30340,28 @@ func ParseV1RestorePitrBackupResponse(rsp *http.Response) (*V1RestorePitrBackupR
 	response := &V1RestorePitrBackupResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 201:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest PlanGateErrorBody
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case rsp.StatusCode == 401:
+		break // No content-type
+
+	case rsp.StatusCode == 403:
+		break // No content-type
+
+	case rsp.StatusCode == 429:
+		break // No content-type
+
 	}
 
 	return response, nil

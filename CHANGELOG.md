@@ -2,6 +2,11 @@
 
 All notable changes per release. Versions follow [semver](https://semver.org).
 
+## v0.6.1, 2026-11-27
+
+- Added a `JSON400` field (`*PlanGateErrorBody`) and a `GetJSON400` method to `V1RestorePitrBackupResponse`. `ParseV1RestorePitrBackupResponse` now decodes a JSON 400 response body into it.
+- Updated the doc comment of `PlanGateErrorBody.Error.UpgradeUrl`: it can point to the project add-ons page when a per-project add-on is missing. No type change.
+
 ## v0.6.0, 2026-11-19
 
 - Added the log query endpoint `POST /v1/projects/{ref}/analytics/endpoints/logs`: `ClientInterface.V1PostProjectLogs` and `V1PostProjectLogsWithBody`, with matching methods on `Client`, `ClientWithResponses` (`V1PostProjectLogsWithResponse`, `V1PostProjectLogsWithBodyWithResponse`), and the helpers `NewV1PostProjectLogsRequest`, `NewV1PostProjectLogsRequestWithBody`, `ParseV1PostProjectLogsResponse`.
